@@ -1,0 +1,22 @@
+{
+  "name": "arweave-imdb-scraper",
+  "version": "1.0.0",
+  "description": "Web scraper for collecting movie data from IMDB for the Arweave-based IMDB-like platform",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "puppeteer": "^21.5.0",
+    "arweave": "^1.14.0",
+    "dotenv": "^16.3.1",
+    "winston": "^3.11.0",
+    "node-fetch": "^3.3.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "type": "module"
+}
