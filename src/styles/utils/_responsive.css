@@ -1,0 +1,143 @@
+/* Responsive Design Overrides */
+
+@media (max-width: 768px) {
+  /* Navigation (already handled in _navigation.css, but keep if needed) */
+  /* .nav-container { ... } */
+  /* .nav-menu { ... } */
+  /* .nav-links { ... } */
+  /* .nav-actions { ... } */
+
+  /* Home Page */
+  .hero-section h1 {
+    font-size: 2.5rem; /* Adjust hero title */
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center; /* Center buttons when stacked */
+  }
+
+  .cta-buttons .btn {
+    width: 80%; /* Make buttons wider */
+    max-width: 300px;
+  }
+
+  .quick-start-section {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+  
+  .quick-start-section li {
+    padding: var(--spacing-md);
+    padding-left: var(--spacing-3xl);
+    font-size: 1rem;
+  }
+  
+  .quick-start-section li::before {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 0.9rem;
+  }
+
+  /* Search/Filter (already handled in _filters.css, but keep if needed) */
+  /* .search-bar { ... } */
+  /* .filter-toggle { ... } */
+  /* .filter-actions { ... } */
+  /* .btn-clear-filters, .btn-apply-filters { ... } */
+
+  /* Grids */
+  .movie-grid,
+  .tvshow-grid {
+    /* Adjust columns for smaller screens */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-md); /* Reduce gap */
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr; /* Stack features */
+  }
+
+  /* Detail Page */
+  .details-content {
+    grid-template-columns: 1fr; /* Stack poster and info */
+    gap: var(--spacing-lg); /* Adjust gap */
+  }
+
+  .details-poster {
+    max-width: 300px; /* Limit poster width when stacked */
+    margin: 0 auto; /* Center the poster */
+  }
+
+  .details-info .movie-title,
+  .details-info .tvshow-title {
+    font-size: 2rem; /* Adjust title size */
+    text-align: center; /* Center title when stacked */
+  }
+
+  .movie-meta,
+  .tvshow-meta {
+    font-size: 0.9rem; /* Adjust meta text size */
+    justify-content: center; /* Center meta items */
+    gap: var(--spacing-sm) var(--spacing-md); /* Adjust gaps */
+  }
+
+  .details-info .movie-rating,
+  .details-info .tvshow-rating {
+      justify-content: center; /* Center rating */
+  }
+
+  .movie-actions,
+  .tvshow-actions {
+      justify-content: center; /* Center action buttons */
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr; /* Stack info items */
+  }
+
+  .footer-content {
+      grid-template-columns: 1fr; /* Stack footer sections */
+      text-align: center;
+  }
+
+  .footer-links {
+      margin-bottom: var(--spacing-lg);
+  }
+}
+
+/* Add more breakpoints as needed (e.g., max-width: 1024px) */
+@media (max-width: 480px) {
+  /* Specific overrides for very small screens */
+  .movie-grid,
+  .tvshow-grid {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Even smaller cards */
+  }
+
+  .hero-section h1 {
+      font-size: 2rem;
+  }
+
+  .hero-section p {
+      font-size: 1rem;
+  }
+
+  .details-info .movie-title,
+  .details-info .tvshow-title {
+      font-size: 1.8rem;
+  }
+  
+  /* Quick Start Section for very small screens */
+  .quick-start-section h2 {
+    font-size: 1.6rem;
+  }
+  
+  .quick-start-section li {
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) calc(var(--spacing-lg) + var(--spacing-md));
+  }
+  
+  .quick-start-section li::before {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 0.9rem;
+    left: var(--spacing-sm);
+  }
+}

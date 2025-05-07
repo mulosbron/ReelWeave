@@ -1,0 +1,190 @@
+/* Movie and TV Show Detail Page Styles */
+
+.movie-detail-page,
+.tvshow-detail-page {
+  /* Container styles in layout/_containers.css */
+}
+
+.movie-details,
+.tvshow-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl); /* Space between sections */
+}
+
+.details-header {
+  margin-bottom: var(--spacing-md);
+  /* Contains the back button */
+}
+/* .btn-back is styled in components/_buttons.css */
+
+/* .details-content grid is styled in layout/_grid.css */
+
+.details-poster {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--background-tertiary); /* Placeholder */
+}
+
+.details-poster img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.details-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg); /* Space between info elements */
+}
+
+/* Title styling reused from _cards.css, but larger */
+.details-info .movie-title,
+.details-info .tvshow-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0;
+  white-space: normal; /* Allow wrapping */
+}
+
+.movie-meta,
+.tvshow-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  gap: var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: 1rem; /* Slightly smaller than original */
+}
+
+/* Separator styled in utils/_helpers.css */
+
+/* Rating styling shared with _cards.css, but potentially larger */
+.details-info .movie-rating,
+.details-info .tvshow-rating {
+  position: static; /* Override absolute positioning from card */
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: var(--spacing-sm); /* Add some space below */
+}
+
+.rating-scale {
+  color: var(--text-secondary);
+  font-size: 1rem; /* Smaller scale text */
+  font-weight: normal;
+}
+
+.movie-actions,
+.tvshow-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap; /* Allow buttons to wrap */
+}
+/* Add to list component potentially styled separately or below */
+
+.movie-description,
+.tvshow-description,
+.movie-additional-info,
+.tvshow-additional-info {
+  margin-top: var(--spacing-md); /* Consistent top margin */
+}
+
+.movie-description h2,
+.tvshow-description h2,
+.movie-additional-info h2,
+.tvshow-additional-info h2 {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-primary); /* Add separator */
+  padding-bottom: var(--spacing-sm);
+}
+
+.movie-description p,
+.tvshow-description p {
+  color: var(--text-tertiary);
+  line-height: 1.6;
+}
+
+/* .info-grid is styled in layout/_grid.css */
+.info-item {
+  background: var(--background-tertiary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+}
+/* .info-label, .info-value styled in base/_typography.css */
+
+.details-community {
+  margin-top: var(--spacing-2xl);
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--border-primary);
+}
+
+.details-community h2 {
+  font-size: 1.75rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.auth-prompt {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background: var(--background-tertiary);
+  border-radius: var(--radius-lg);
+}
+
+.auth-prompt p {
+  margin-bottom: var(--spacing-md);
+  color: var(--text-tertiary);
+}
+/* Buttons within auth-prompt use standard .btn styles */
+
+/* Add to List Component (often part of Details) */
+.add-to-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  /* Could also be flex-row if preferred */
+}
+
+.quick-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap; /* Allow wrapping */
+}
+
+.list-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 0.9rem; /* Slightly smaller */
+}
+
+.list-button:hover {
+  background: var(--background-tertiary);
+  border-color: var(--border-secondary);
+}
+
+.list-button.in-list {
+  /* Example: Highlight if item is in the list */
+  background: var(--background-tertiary);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.list-button svg { /* Style icons inside buttons */
+    width: 1em;
+    height: 1em;
+}
+
+.list-button.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+/* .btn-manage styled in components/_buttons.css */

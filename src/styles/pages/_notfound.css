@@ -1,0 +1,43 @@
+/* Not Found Page Styles */
+.not-found-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-xl); /* 4rem 2rem */
+    min-height: 60vh; /* Sayfanın ortasında görünmesi için */
+  }
+  
+  .not-found-content {
+    max-width: 600px;
+  }
+  
+  .not-found-content h1 {
+    font-size: 6rem; /* Büyük 404 */
+    font-weight: bold;
+    color: var(--primary-color); /* #6366f1 */
+    margin-bottom: 0;
+    line-height: 1;
+  }
+  
+  .not-found-content h2 {
+    font-size: 2rem;
+    color: var(--text-primary); /* #ffffff */
+    margin-top: var(--spacing-sm); /* 0.5rem */
+    margin-bottom: var(--spacing-lg); /* 1.5rem */
+  }
+  
+  .not-found-content p {
+    color: var(--text-secondary); /* #9ca3af */
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-sm); /* 0.5rem */
+  }
+  
+  .not-found-actions {
+    margin-top: var(--spacing-2xl); /* 3rem */
+    display: flex;
+    flex-wrap: wrap; /* Küçük ekranlarda alt alta geçsin */
+    justify-content: center;
+    gap: var(--spacing-md); /* 1rem */
+  }

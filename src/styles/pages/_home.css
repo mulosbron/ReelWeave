@@ -1,0 +1,125 @@
+/* Home Page Specific Styles */
+
+/* Hero Section */
+.hero-section {
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  margin-bottom: var(--spacing-3xl);
+  /* Add background image or gradient if desired */
+  /* background: linear-gradient(rgba(26, 31, 46, 0.8), rgba(26, 31, 46, 1)), url('/path/to/hero-image.jpg'); */
+  /* background-size: cover; */
+}
+
+.hero-section h1 {
+  font-size: 3rem; /* Keep specific size for hero */
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.hero-section p {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-2xl); /* Increased margin */
+  max-width: 700px; /* Constrain width for readability */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+/* Features Section */
+.features-section {
+  margin-bottom: var(--spacing-3xl);
+  padding: 0 var(--spacing-xl); /* Add horizontal padding */
+}
+
+.features-section h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl); /* Increased margin */
+}
+/* .features-grid styles are in layout/_grid.css */
+/* .feature-card styles are in components/_cards.css */
+
+/* Alternatif Get Started Bölümü Stili */
+.quick-start-section {
+  margin-bottom: var(--spacing-3xl);
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  background-color: var(--background-secondary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.quick-start-section h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  font-size: 2rem;
+  color: var(--text-primary);
+  position: relative;
+  display: inline-block;
+  padding-bottom: var(--spacing-sm);
+}
+
+.quick-start-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: var(--radius-full);
+}
+
+.quick-start-section ol {
+  list-style: none;
+  padding: 0;
+  counter-reset: step-counter;
+  margin: var(--spacing-xl) auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-width: 800px;
+}
+
+.quick-start-section li {
+  counter-increment: step-counter;
+  position: relative;
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-lg) var(--spacing-3xl);
+  background-color: var(--background-tertiary);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  font-weight: 500;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.quick-start-section li:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.quick-start-section li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}

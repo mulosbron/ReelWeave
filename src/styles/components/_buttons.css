@@ -1,0 +1,99 @@
+/* Button Styles */
+.btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  .btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--secondary-hover);
+  }
+  
+  .btn-connect {
+    background-color: var(--success-color);
+    color: white;
+  }
+  
+  .btn-disconnect {
+    background-color: var(--danger-color);
+    color: white;
+  }
+  
+  .btn-back {
+    background: transparent;
+    border: 1px solid var(--border-primary);
+    color: var(--text-secondary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .btn-back:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+  
+  .btn-manage {
+    background: var(--background-tertiary);
+    border: 1px solid var(--border-secondary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .btn-manage:hover {
+    background: var(--border-secondary);
+  }
+  
+  /* Add to List Buttons */
+  .btn-add-watchlist,
+  .btn-add-watched {
+    flex: 1;
+    padding: var(--spacing-sm);
+    font-size: 0.875rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .btn-add-watchlist {
+    background-color: var(--info-color);
+    color: white;
+  }
+  
+  .btn-add-watched {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  .btn-add-watchlist:hover {
+    background-color: #2563eb;
+  }
+  
+  .btn-add-watched:hover {
+    background-color: var(--secondary-hover);
+  }

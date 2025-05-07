@@ -1,0 +1,19 @@
+/* Movies & TV Shows Listing Page Specific Styles */
+
+/* Styles for the main container of the movies/tv page, if any */
+.movie-list-page,
+.tvshow-list-page {
+  /* Example: Add extra top padding */
+  /* padding-top: var(--spacing-lg); */
+}
+
+/* Search container is handled by _filters.css */
+/* Movie/TV grids are handled by _grid.css */
+/* Movie/TV cards are handled by _cards.css */
+
+/* Any overrides or specific layout adjustments for these pages go here */
+/* For example, adjusting margins between search and grid */
+.search-filter-container + .movie-grid,
+.search-filter-container + .tvshow-grid {
+  margin-top: var(--spacing-xl);
+}

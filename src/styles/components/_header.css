@@ -1,0 +1,28 @@
+/* Header Styles */
+.app-header {
+  background-color: var(--background-secondary);
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  width: 100%;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-xl); /* Consistent padding */
+  /* display: flex; align-items: center; justify-content: space-between; */ /* Moved to nav-container */
+}
+
+/* Wallet Info specific styles if primarily in header */
+.wallet-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* .wallet-address is handled in _typography.css for monospace */
+.wallet-address {
+  color: var(--text-secondary);
+}

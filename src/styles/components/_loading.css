@@ -1,0 +1,31 @@
+/* Loading Component */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    min-height: 200px; /* Give it some minimum height */
+    width: 100%;
+  }
+  
+  .loading-container.fullscreen {
+    /* Adjust height calculation based on header/footer height if necessary */
+    min-height: calc(100vh - 150px); /* Example calculation */
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--background-tertiary); /* Use tertiary background for track */
+    border-top-color: var(--primary-color); /* Use primary color for spinner */
+    border-radius: var(--radius-full);
+    animation: spin 1s linear infinite;
+  }
+  
+  /* Keyframe animation is closely tied to the spinner */
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }

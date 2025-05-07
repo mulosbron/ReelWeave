@@ -1,0 +1,41 @@
+/* My Lists Page Styles */
+.my-lists-page {
+    /* Genel sayfa container'ı için ek stiller gerekirse */
+  }
+  
+  .not-connected {
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-xl); /* 4rem 2rem */
+    background-color: var(--background-secondary); /* #242b3d */
+    border-radius: var(--radius-lg); /* 12px */
+    margin-top: var(--spacing-xl); /* 2rem */
+  }
+  
+  .not-connected h2 {
+    margin-bottom: var(--spacing-md); /* 1rem */
+    color: var(--warning-color); /* #f59e0b or primary */
+  }
+  
+  .not-connected p {
+    margin-bottom: var(--spacing-lg); /* 1.5rem */
+    color: var(--text-secondary); /* #9ca3af */
+  }
+  
+  .lists-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl); /* 3rem */
+    margin-top: var(--spacing-lg); /* 1.5rem */
+  }
+  
+  .list-section {
+    /* Individual UserList styling would be in _lists.css */
+    /* This just provides spacing for the section */
+    border-top: 1px solid var(--border-primary); /* #374151 */
+    padding-top: var(--spacing-xl); /* 2rem */
+  }
+  
+  .list-section:first-child {
+    border-top: none;
+    padding-top: 0;
+  }

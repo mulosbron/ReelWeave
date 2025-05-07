@@ -1,0 +1,180 @@
+/* Filter Component Styles */
+.search-filter-container {
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .search-bar {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .search-input-wrapper {
+    flex: 1;
+    position: relative;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 0.75rem var(--spacing-md);
+    padding-left: 2.5rem;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+    font-size: 1rem;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  .filter-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 0.75rem var(--spacing-md);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .filter-toggle:hover {
+    background-color: var(--background-tertiary);
+  }
+  
+  .filter-toggle.active {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+  
+  .filter-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  .filter-container {
+    background: var(--background-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    position: relative;
+    animation: slideDown var(--transition-fast) ease-out forwards;
+  }
+  
+  .filter-group {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .filter-group:last-child {
+    margin-bottom: 0;
+  }
+  
+  .filter-label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-tertiary);
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+  
+  .filter-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .filter-select:hover {
+    border-color: var(--border-secondary);
+  }
+  
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+  
+  .filter-select option {
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    padding: var(--spacing-sm);
+  }
+  
+  .filter-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-primary);
+  }
+  
+  .btn-clear-filters {
+    flex: 1;
+    padding: 0.75rem var(--spacing-md);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    color: var(--text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .btn-clear-filters:hover {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+    background-color: rgba(239, 68, 68, 0.1);
+  }
+  
+  .btn-clear-filters:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .btn-clear-filters:disabled:hover {
+    border-color: var(--border-primary);
+    color: var(--text-secondary);
+    background-color: transparent;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .search-bar {
+      flex-direction: column;
+    }
+    
+    .filter-toggle {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .filter-actions {
+      flex-direction: column;
+    }
+    
+    .btn-clear-filters {
+      width: 100%;
+    }
+  }
