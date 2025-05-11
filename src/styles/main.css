@@ -15,6 +15,8 @@
 @import './components/_header.css';
 @import './components/_loading.css';
 @import './components/_navigation.css';
+@import './components/_recommendations.css';
+@import './components/_gateway-selector.css';
 
 @import './layout/_containers.css';
 @import './layout/_grid.css';

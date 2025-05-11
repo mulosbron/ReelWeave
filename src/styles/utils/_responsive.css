@@ -12,16 +12,6 @@
     font-size: 2.5rem; /* Adjust hero title */
   }
 
-  .cta-buttons {
-    flex-direction: column;
-    align-items: center; /* Center buttons when stacked */
-  }
-
-  .cta-buttons .btn {
-    width: 80%; /* Make buttons wider */
-    max-width: 300px;
-  }
-
   .quick-start-section {
     padding: var(--spacing-xl) var(--spacing-md);
   }
@@ -37,12 +27,6 @@
     height: 1.8rem;
     font-size: 0.9rem;
   }
-
-  /* Search/Filter (already handled in _filters.css, but keep if needed) */
-  /* .search-bar { ... } */
-  /* .filter-toggle { ... } */
-  /* .filter-actions { ... } */
-  /* .btn-clear-filters, .btn-apply-filters { ... } */
 
   /* Grids */
   .movie-grid,

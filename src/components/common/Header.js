@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom'; // NavLink ekledik aktif stil için
+import { Link, NavLink } from 'react-router-dom'; // Added NavLink for active styles
 import WalletConnect from '../auth/WalletConnect';
-import useAuth from '../../hooks/useAuth'; // isConnected kontrolü için
+import GatewaySelector from './GatewaySelector';
+import useAuth from '../../hooks/useAuth'; // For checking if wallet is connected
 
 const Header = () => {
-  const { isConnected } = useAuth(); // Cüzdan bağlı mı kontrolü
+  const { isConnected } = useAuth(); // Check if wallet is connected
 
   return (
     <header className="app-header">
@@ -17,16 +18,17 @@ const Header = () => {
 
             <div className="nav-menu">
               <ul className="nav-links">
-                <li><NavLink to="/" end>Home</NavLink></li> {/* NavLink ve end prop'u */}
+                <li><NavLink to="/" end>Home</NavLink></li> {/* NavLink with end prop */}
                 <li><NavLink to="/movies">Movies</NavLink></li>
                 <li><NavLink to="/tvshows">TV Shows</NavLink></li>
-                <li><NavLink to="/community">Community</NavLink></li> {/* Yeni Link */}
-                {isConnected && ( // Sadece cüzdan bağlıysa göster
-                  <li><NavLink to="/my-lists">My Lists</NavLink></li> /* Yeni Link */
+                <li><NavLink to="/community">Community</NavLink></li> {/* New Link */}
+                {isConnected && ( // Only show if wallet is connected
+                  <li><NavLink to="/my-lists">My Lists</NavLink></li> /* New Link */
                 )}
               </ul>
 
               <div className="nav-actions">
+                <GatewaySelector />
                 <WalletConnect />
               </div>
             </div>

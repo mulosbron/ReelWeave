@@ -22,19 +22,19 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
     e.preventDefault();
     
     if (!comment.trim()) {
-      showNotification('error', 'Yorum boş olamaz');
+      showNotification('error', 'Comment cannot be empty');
       return;
     }
     
     if (!isConnected || !wallet) {
-      showNotification('error', 'Yorum yapmak için cüzdanınızı bağlamanız gerekiyor');
+      showNotification('error', 'You need to connect your wallet to comment');
       return;
     }
     
     setIsSubmitting(true);
     
     try {
-      // Yorum verilerini hazırla
+      // Prepare comment data
       const commentData = {
         video: videoId,
         parent: parentId,
@@ -43,20 +43,20 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
         version: APP_VERSION
       };
       
-      // Yorumu Arweave'e gönder
+      // Send comment to Arweave
       await submitComment(commentData);
       
-      // Formu temizle ve başarılı bildirimi göster
+      // Clear form and show success notification
       setComment('');
-      showNotification('success', 'Yorumunuz başarıyla gönderildi. Arweave ağında onaylanması birkaç dakika sürebilir.');
+      showNotification('success', 'Your comment has been submitted successfully. It may take a few minutes to be confirmed on the Arweave network.');
       
-      // Callback fonksiyonunu çağır
+      // Call callback function
       if (typeof onCommentSubmitted === 'function') {
         onCommentSubmitted();
       }
     } catch (error) {
-      console.error('Yorum gönderilirken hata oluştu:', error);
-      showNotification('error', `Yorum gönderilirken hata oluştu: ${error.message}`);
+      console.error('Error submitting comment:', error);
+      showNotification('error', `Error submitting comment: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -142,7 +142,7 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
         <textarea
           value={comment}
           onChange={handleCommentChange}
-          placeholder={parentId ? "Yanıtınızı yazın..." : "Yorumunuzu yazın..."}
+          placeholder={parentId ? "Write your reply..." : "Write your comment..."}
           disabled={isSubmitting || !isConnected}
           rows={parentId ? 2 : 3}
         />
@@ -154,7 +154,7 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
               className="cancel-button"
               disabled={isSubmitting}
             >
-              İptal
+              Cancel
             </button>
           )}
           <button 
@@ -162,13 +162,13 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
             className="submit-button"
             disabled={isSubmitting || !isConnected || !comment.trim()}
           >
-            {isSubmitting ? <Loading size="small" /> : (parentId ? "Yanıtla" : "Yorum Yap")}
+            {isSubmitting ? <Loading size="small" /> : (parentId ? "Reply" : "Comment")}
           </button>
         </div>
       </form>
       {!isConnected && (
         <p className="comment-form-notice">
-          Yorum yapmak için cüzdanınızı bağlamanız gerekiyor.
+          You need to connect your wallet to comment.
         </p>
       )}
     </div>

@@ -12,8 +12,8 @@ const HomePage = () => {
         <h1>Welcome to ReelWeave</h1>
         <p>Your decentralized movie and TV show tracking platform powered by Arweave</p>
         <div className="cta-buttons">
-          <Link to="/movies" className="btn btn-primary">Browse Movies</Link>
-          <Link to="/tvshows" className="btn btn-secondary">Browse TV Shows</Link>
+          <Link to="/movies" className="home-btn primary-btn"><span>BROWSE MOVIES</span></Link>
+          <Link to="/tvshows" className="home-btn secondary-btn"><span>BROWSE TV SHOWS</span></Link>
         </div>
       </section>
 

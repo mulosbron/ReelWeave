@@ -43,7 +43,7 @@ const WEIGHTS = {
     allItems,
     userItems,
     contentType,
-    limit = 10
+    limit = 100
   ) => {
     if (!userItems.length || !allItems.length) {
       return [];
@@ -85,7 +85,7 @@ const WEIGHTS = {
           type: contentType
         };
       })
-      .filter(item => item.score > 0.3) // Only include items with reasonable score
+      .filter(item => item.score > 0.15) // Daha fazla öneri için eşik değerini daha da düşürdük (0.2 -> 0.15)
       .sort((a, b) => b.score - a.score) // Sort by score
       .slice(0, limit); // Limit results
   
@@ -93,7 +93,7 @@ const WEIGHTS = {
   };
   
   // Get genre-based recommendations (simplified without actual genre data)
-  export const getGenreBasedRecommendations = (allItems, userItems, limit = 5) => {
+  export const getGenreBasedRecommendations = (allItems, userItems, limit = 30) => {
     // Group user items by rating brackets
     const ratingBrackets = {
       high: userItems.filter(item => parseFloat(item.itemDetails.rating) >= 8.5),
@@ -117,7 +117,7 @@ const WEIGHTS = {
         const bracketRecommendations = allItems
           .filter(item => 
             !watchedIds.has(item.hash) &&
-            Math.abs(parseFloat(item.rating) - averageRating) < 0.5
+            Math.abs(parseFloat(item.rating) - averageRating) < 1.0 // Daha fazla öneri için eşik değerini artırdık (0.7 -> 1.0)
           )
           .slice(0, Math.ceil(limit / 3));
   
@@ -129,7 +129,7 @@ const WEIGHTS = {
   };
   
   // Get trending recommendations (highest rated unwatched items)
-  export const getTrendingRecommendations = (allItems, userItems, limit = 5) => {
+  export const getTrendingRecommendations = (allItems, userItems, limit = 15) => {
     const watchedIds = new Set(userItems.map(item => item.itemId));
     
     return allItems
@@ -143,7 +143,7 @@ const WEIGHTS = {
     allItems,
     userItems,
     contentType,
-    limit = 15
+    limit = 50
   ) => {
     // Get recommendations from different strategies
     const similarityBased = generateRecommendations(allItems, userItems, contentType, limit);

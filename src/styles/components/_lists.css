@@ -1,0 +1,87 @@
+/* Liste bileşenleri için stiller */
+
+/* 
+  Boş liste mesajı 
+*/
+.empty-list {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-secondary);
+  background-color: var(--background-primary);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md);
+}
+
+.empty-list p {
+  margin-bottom: var(--spacing-lg);
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.empty-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.empty-actions .btn {
+  margin: var(--spacing-sm);
+  min-width: 140px;
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* 
+  İçerik türü işareti 
+*/
+.content-type-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  z-index: 2;
+}
+
+/* 
+  Liste öğeleri 
+*/
+.user-list {
+  width: 100%;
+}
+
+/* 
+  Liste grid 
+*/
+.list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.6rem;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .list-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .list-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  
+  .empty-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .empty-actions .btn {
+    width: 100%;
+    max-width: 200px;
+  }
+} 

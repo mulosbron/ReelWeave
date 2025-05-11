@@ -1,4 +1,6 @@
 import Arweave from 'arweave';
+import axios from 'axios';
+import { ARIO } from '@ar.io/sdk/web';
 
 // Varsayılan Arweave konfigürasyonu
 const ARWEAVE_CONFIG = {
@@ -9,17 +11,57 @@ const ARWEAVE_CONFIG = {
   logging: false,
 };
 
-// Yedek gateway listesi - çok sayıda gateway yerine en güvenilir birkaç tanesi yeterli
-const FALLBACK_GATEWAY_LIST = [
-  'arweave.net',         // Varsayılan gateway
-  'arweave.dev',         // Arweave Dev gateway
-  'g8way.io',            // G8way gateway
-  'ar-io.dev'            // AR.IO resmi gateway
-];
+// AR.IO istemcisi
+const ario = ARIO.mainnet();
 
-// Aktif gateway listesi
-let GATEWAY_LIST = [...FALLBACK_GATEWAY_LIST];
+// Aktif gateway listesi (bu liste dinamik olarak güncellenecek)
+let GATEWAY_LIST = [];
 let currentGatewayIndex = 0;
+
+// Gateway listesini AR.IO'dan al ve güncelle
+export const refreshGatewayList = async () => {
+  try {
+    console.log('AR.IO ağından gateway listesi alınıyor...');
+    
+    // AR.IO'dan aktif gateway'leri al
+    const gatewaysResponse = await ario.getGateways({
+      limit: 400,
+      sortBy: 'weights.compositeWeight', // En iyi performans gösteren gateway'ler
+      sortOrder: 'desc'
+    });
+    
+    // Debug: Tüm gateway verilerini yazdır
+    console.log('AR.IO Gateway Detayları:', JSON.stringify(gatewaysResponse.items, null, 2));
+    
+    // Gateway listesini oluştur (HTTP/HTTPS olanları ve performansı %95+ olanları filtrele)
+    const newGateways = gatewaysResponse.items
+      .filter(gw =>
+        gw.settings &&
+        gw.settings.fqdn &&
+        gw.status === 'joined' &&
+        gw.weights &&
+        gw.weights.gatewayPerformanceRatio >= 0.95 // %95 ve üzeri performans
+      )
+      .map(gw => gw.settings.fqdn);
+    
+    if (newGateways.length > 0) {
+      // Sadece AR.IO'dan alınan gateway'leri kullan
+      GATEWAY_LIST = [...new Set(newGateways)];
+      console.log('Gateway listesi güncellendi:', GATEWAY_LIST);
+      return GATEWAY_LIST;
+    } else {
+      console.warn('AR.IO ağından gateway listesi alınamadı, varsayılan gateway kullanılıyor');
+      // Varsayılan gateway kullan
+      GATEWAY_LIST = ['arweave.net'];
+      return GATEWAY_LIST;
+    }
+  } catch (error) {
+    console.error('Gateway listesi güncellenirken hata oluştu:', error);
+    // Hata durumunda varsayılan gateway kullan
+    GATEWAY_LIST = ['arweave.net'];
+    return GATEWAY_LIST;
+  }
+};
 
 // Arweave istemcisini oluştur
 export const createArweaveInstance = (gatewayHost = ARWEAVE_CONFIG.host) => {
@@ -38,27 +80,46 @@ export const arweave = createArweaveInstance();
 // Gateway durumunu kontrol et
 export const checkGatewayConnection = async (gateway) => {
   try {
+    console.log(`Gateway ${gateway} bağlantısı test ediliyor...`);
+    // Önce basit bir HTTP isteği ile hızlı kontrol
+    const healthCheck = await axios.head(`https://${gateway}/info`, { 
+      timeout: 5000 
+    });
+    
+    if (healthCheck.status >= 200 && healthCheck.status < 300) {
+      console.log(`Gateway ${gateway} çevrimiçi`);
+      return true;
+    }
+    
+    // HTTP kontrolü başarısız olursa tam Arweave kontrolü yap
     const testArweave = createArweaveInstance(gateway);
     const networkInfo = await testArweave.network.getInfo();
-    console.log(`Gateway ${gateway} is online:`, networkInfo);
+    console.log(`Gateway ${gateway} çevrimiçi:`, networkInfo);
     return true;
   } catch (error) {
-    console.error(`Gateway ${gateway} is offline:`, error);
+    console.error(`Gateway ${gateway} çevrimdışı:`, error.message);
     return false;
   }
 };
 
 // Bir sonraki kullanılabilir gateway'e geç
 export const switchToNextGateway = async () => {
+  // Gateway listesi boşsa, ilk önce gateway listesini al
+  if (GATEWAY_LIST.length === 0) {
+    await refreshGatewayList();
+  }
+  
   let attemptCount = 0;
   const maxAttempts = GATEWAY_LIST.length;
+  
+  console.log(`Gateway değiştirme işlemi başlatılıyor. Mevcut gateway: ${GATEWAY_LIST[currentGatewayIndex]}`);
   
   while (attemptCount < maxAttempts) {
     // Bir sonraki gateway'e geç
     currentGatewayIndex = (currentGatewayIndex + 1) % GATEWAY_LIST.length;
     const newGateway = GATEWAY_LIST[currentGatewayIndex];
     
-    console.log(`Gateway değiştiriliyor: ${newGateway}`);
+    console.log(`Gateway değiştiriliyor: ${newGateway} (${attemptCount + 1}/${maxAttempts})`);
     
     // Gateway'i test et
     const isConnected = await checkGatewayConnection(newGateway);
@@ -83,9 +144,13 @@ export const switchToNextGateway = async () => {
   }
   
   console.error("Tüm gateway'ler denendi ancak hiçbiri çalışmıyor");
+  
+  // Tüm gateway'ler çalışmıyorsa listeyi yenile ve tekrar dene
+  await refreshGatewayList();
+  
   return {
     success: false,
-    gateway: GATEWAY_LIST[currentGatewayIndex]
+    gateway: GATEWAY_LIST[currentGatewayIndex] || 'arweave.net'
   };
 };
 
@@ -121,19 +186,17 @@ export const checkArweaveConnection = async () => {
 
 // Aktif gateway'i getir
 export const getCurrentGateway = () => {
-  return GATEWAY_LIST[currentGatewayIndex];
+  return GATEWAY_LIST[currentGatewayIndex] || 'arweave.net';
 };
 
 // Belirli bir gateway'e geç
 export const switchToGateway = async (gatewayHost) => {
-  // Gateway listede var mı kontrol et
-  const gatewayIndex = GATEWAY_LIST.indexOf(gatewayHost);
+  // Gateway listede var mı kontrol et, yoksa listeye ekle
+  let gatewayIndex = GATEWAY_LIST.indexOf(gatewayHost);
   if (gatewayIndex === -1) {
-    console.error(`Gateway ${gatewayHost} onaylı listede yok`);
-    return {
-      success: false,
-      gateway: GATEWAY_LIST[currentGatewayIndex]
-    };
+    GATEWAY_LIST.push(gatewayHost);
+    gatewayIndex = GATEWAY_LIST.length - 1;
+    console.log(`Gateway ${gatewayHost} listeye eklendi`);
   }
   
   // Gateway'i test et
@@ -161,9 +224,17 @@ export const switchToGateway = async (gatewayHost) => {
   console.error(`Gateway'e bağlanılamadı: ${gatewayHost}`);
   return {
     success: false,
-    gateway: GATEWAY_LIST[currentGatewayIndex]
+    gateway: GATEWAY_LIST[currentGatewayIndex] || 'arweave.net'
   };
 };
 
-// Başlangıçta Arweave bağlantısını kontrol et, hata varsa başka gateway'e geç
-checkArweaveConnection();
+// Uygulamanın başlangıcında gateway listesini al
+refreshGatewayList().then(() => {
+  console.log('Gateway listesi başarıyla yüklendi, bağlantı kontrol ediliyor...');
+  // Başlangıçta Arweave bağlantısını kontrol et, hata varsa başka gateway'e geç
+  checkArweaveConnection();
+}).catch(error => {
+  console.error('Gateway listesi yüklenirken hata oluştu:', error);
+  // Yine de bağlantı kontrolü yap
+  checkArweaveConnection();
+});

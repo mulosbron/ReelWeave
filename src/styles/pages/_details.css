@@ -14,11 +14,7 @@
 
 .details-header {
   margin-bottom: var(--spacing-md);
-  /* Contains the back button */
 }
-/* .btn-back is styled in components/_buttons.css */
-
-/* .details-content grid is styled in layout/_grid.css */
 
 .details-poster {
   width: 100%;

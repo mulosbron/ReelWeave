@@ -176,37 +176,6 @@
   border: 1px solid var(--border-primary);
 }
 
-/* Button styles */
-.btn-submit-review {
-  align-self: center;
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-weight: 700;
-  font-size: 1.125rem;
-  margin-top: var(--spacing-md);
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  min-width: 200px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.btn-submit-review:hover:not(:disabled) {
-  background-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.btn-submit-review:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background-color: var(--text-secondary);
-}
-
 /* Form error styling */
 .form-error {
   color: var(--danger-color);
@@ -281,14 +250,15 @@
 }
 
 .comment-item:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
 }
 
 .comment-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
   margin-bottom: var(--spacing-md);
   padding-bottom: var(--spacing-sm);
   border-bottom: 1px solid var(--border-primary);
@@ -300,20 +270,30 @@
   gap: var(--spacing-xs);
 }
 
-.author-address {
-  font-weight: 600;
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.wallet-address {
+  font-family: 'Roboto Mono', monospace;
   color: var(--primary-color);
-  font-family: monospace;
+  font-weight: 600;
   font-size: 0.9rem;
+  padding: 2px 6px;
+  background-color: rgba(99, 102, 241, 0.1);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(99, 102, 241, 0.2);
 }
 
 .comment-rating {
   display: flex;
-  gap: 2px;
+  gap: var(--spacing-xs);
 }
 
 .star {
-  color: var(--text-secondary);
+  color: var(--star-color);
 }
 
 .star.filled {
@@ -321,60 +301,100 @@
 }
 
 .comment-date {
-  font-size: 0.8rem;
   color: var(--text-secondary);
-  font-style: italic;
+  font-size: 0.8rem;
+  align-self: flex-start;
 }
 
 .comment-content {
-  color: var(--text-tertiary);
+  color: var(--text-primary);
   line-height: 1.6;
+  margin-top: var(--spacing-md);
+}
+
+/* Yorum içindeki film/dizi içeriği için stiller */
+.comment-item-content {
+  background-color: var(--background-primary);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-primary);
+  transition: all var(--transition-fast);
+}
+
+.comment-item-content:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.content-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.content-type-badge {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.5px;
+}
+
+.content-title {
+  font-weight: 500;
+  flex: 1;
+  transition: color var(--transition-fast);
+}
+
+.content-link:hover .content-title {
+  color: var(--primary-color);
 }
 
 /* Animation */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 /* User's own comment highlighting */
 .comment-item.user-comment {
-  border-left: 4px solid var(--primary-color);
-  background-color: rgba(99, 102, 241, 0.15);
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+  background-color: rgba(99, 102, 241, 0.1);
+  border-color: var(--primary-color);
+  border-width: 1px;
   position: relative;
   overflow: hidden;
-  z-index: 2;
 }
 
 .comment-item.user-comment::before {
   content: '';
   position: absolute;
   top: 0;
-  right: 0;
-  width: 30px;
-  height: 30px;
-  background-color: var(--primary-color);
-  transform: rotate(45deg) translate(15px, -15px);
-  z-index: 1;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary-color), var(--primary-hover));
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
 }
 
 .comment-item.user-comment .author-address {
   color: var(--primary-color);
-  font-weight: bold;
 }
 
 .user-badge {
   display: inline-block;
   background-color: var(--primary-color);
   color: white;
-  font-weight: bold;
-  font-size: 0.75rem;
-  padding: 0.15rem 0.5rem;
+  font-size: 0.7rem;
+  padding: 2px 6px;
   border-radius: var(--radius-sm);
-  margin-left: var(--spacing-xs);
-  vertical-align: middle;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  margin-left: var(--spacing-sm);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -430,18 +450,11 @@
 }
 
 .btn-edit {
-  background-color: var(--text-secondary);
-  color: white;
-  font-size: 0.85rem;
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: var(--radius-md);
-  border: none;
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
+  /* Bu stil _buttons.css'e taşındı */
 }
 
 .btn-edit:hover {
-  background-color: var(--primary-color);
+  /* Bu stil _buttons.css'e taşındı */
 }
 
 /* User comment container styles */
@@ -475,58 +488,15 @@
 }
 
 .edit-comment-btn {
-  background-color: var(--primary-color);
-  color: white;
-  padding: var(--spacing-md) var(--spacing-lg);
-  font-size: 1.125rem;
-  font-weight: var(--font-weight-bold);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  margin-top: var(--spacing-md);
-  width: 100%;
-  text-align: center;
-  box-shadow: var(--shadow-md);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  /* Bu stil _buttons.css'e taşındı */
 }
 
 .edit-comment-btn:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  /* Bu stil _buttons.css'e taşındı */
 }
 
 /* Form actions for editing */
-.form-actions {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-lg);
-  margin-top: var(--spacing-lg);
-}
-
-.btn-secondary {
-  background-color: var(--text-secondary);
-  color: white;
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-weight: 700;
-  font-size: 1.125rem;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  min-width: 150px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background-color: var(--text-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
+/* .form-actions ve .btn-secondary stilleri _buttons.css'e taşındı */
 
 /* Responsive styles */
 @media (max-width: 768px) {
@@ -536,26 +506,24 @@
   }
   
   .comment-date {
+    align-self: flex-start;
     margin-top: var(--spacing-xs);
   }
   
-  .btn-submit-review {
-    width: 100%;
-    align-self: center;
+  .content-link {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
   }
   
-  .form-actions {
-    flex-direction: column;
-  }
+  /* Buton stilleri _buttons.css'e taşındı */
   
   .review-footer {
     flex-direction: column;
     gap: var(--spacing-sm);
   }
   
-  .btn-edit {
-    width: 100%;
-  }
+  /* Buton stilleri _buttons.css'e taşındı */
 }
 
 /* Diğer kullanıcı yorumları olmadığında mesaj */
@@ -595,4 +563,32 @@
   color: var(--text-secondary);
   font-size: 0.9rem;
   font-style: italic;
+}
+
+/* Transaction bilgisini göstermek için stiller */
+.transaction-info {
+  margin-top: var(--spacing-md);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-primary);
+  padding-top: var(--spacing-sm);
+}
+
+.transaction-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: 'Roboto Mono', monospace;
+  transition: color var(--transition-fast);
+}
+
+.transaction-link:hover {
+  color: var(--primary-color);
+}
+
+.tx-label {
+  font-weight: 600;
+  color: var(--text-tertiary);
 }

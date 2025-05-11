@@ -21,7 +21,6 @@ const Footer = () => {
               <li><Link to="/">Home</Link></li>
               <li><Link to="/movies">Movies</Link></li>
               <li><Link to="/tvshows">TV Shows</Link></li>
-              <li><Link to="/my-lists">My Lists</Link></li>
               <li><Link to="/community">Community</Link></li>
             </ul>
           </div>
@@ -40,7 +39,7 @@ const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="https://www.arconnect.io" 
+                  href="https://docs.wander.app" 
                   target="_blank" 
                   rel="noopener noreferrer"
                 >
@@ -49,11 +48,11 @@ const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="https://github.com" 
+                  href="https://docs.ar.io/ai/sdk" 
                   target="_blank" 
                   rel="noopener noreferrer"
                 >
-                  GitHub
+                  AR.IO
                 </a>
               </li>
             </ul>

@@ -168,3 +168,18 @@ input:focus, textarea:focus, select:focus {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
 }
+
+/* Missing info warning */
+.missing-info-warning {
+  background-color: var(--warning-bg, #fff3cd);
+  color: var(--warning-color, #856404);
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  border-left: 4px solid var(--warning-color, #856404);
+}
+
+.missing-info-warning p {
+  margin: 0;
+}

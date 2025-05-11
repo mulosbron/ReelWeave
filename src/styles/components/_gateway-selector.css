@@ -1,0 +1,96 @@
+/* Gateway Selector Styles */
+.gateway-selector {
+  position: relative;
+  margin-right: var(--spacing-md);
+  min-width: 140px;
+  z-index: var(--z-dropdown);
+  font-family: var(--font-sans);
+}
+
+.gateway-button {
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  box-shadow: var(--shadow-sm);
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.gateway-button:hover,
+.gateway-button:focus {
+  background: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.gateway-button:disabled {
+  background: var(--border-secondary);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.gateway-dropdown {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: var(--background-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  min-width: 180px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: var(--spacing-xs) 0;
+  animation: fadeIn var(--transition-fast);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+.gateway-option {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  text-align: left;
+  font-size: var(--font-size-sm);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.gateway-option:hover,
+.gateway-option:focus {
+  background: var(--background-tertiary);
+  color: var(--text-primary);
+}
+
+.gateway-option.active {
+  background: var(--primary-color);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+  position: relative;
+}
+
+.gateway-option.active::before {
+  content: '✔';
+  color: var(--star-color);
+  font-size: 1rem;
+  margin-right: var(--spacing-xs);
+}
+
+.gateway-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+} 

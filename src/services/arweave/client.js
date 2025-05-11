@@ -174,14 +174,39 @@ class ArweaveClient {
 
   async getTransactionData(txId) {
     return await this.retryOnFailure(async () => {
-      const data = await this.arweave.transactions.getData(txId, { decode: true, string: true });
-      return data;
-    }, 2).catch(error => {
-      if (error?.type === 'TX_PENDING' || error?.message?.includes('pending')) {
-        console.warn(`Transaction data for ${txId} is pending.`);
-        return null;
+      try {
+        // Direkt olarak raw endpoint'i kullanalım
+        const gateway = this.arweave.api.config.host;
+        const protocol = this.arweave.api.config.protocol;
+        const rawUrl = `${protocol}://${gateway}/raw/${txId}`;
+        
+        const response = await fetch(rawUrl);
+        if (!response.ok) {
+          throw new Error(`Raw endpoint yanıt vermedi: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.text();
+        try {
+          // JSON olarak parse etmeyi dene
+          return JSON.parse(data);
+        } catch (e) {
+          // Eğer veri zaten bir nesne ise doğrudan döndür
+          if (typeof data === 'object' && data !== null) {
+            return data;
+          }
+          // JSON değilse ve '[object Object]' şeklindeyse, bu muhtemelen toString() ile dönüştürülmüş bir nesne
+          if (data === '[object Object]') {
+            console.warn(`Transaction verisi [object Object] olarak döndü: ${txId}`);
+            // Boş bir nesne döndür, daha sonra tag'lerden bilgi tamamlanabilir
+            return {};
+          }
+          // Diğer string verileri olduğu gibi döndür
+          return data;
+        }
+      } catch (error) {
+        console.error('Transaction verisi alınamadı:', error);
+        throw error;
       }
-      throw error;
     });
   }
 
@@ -248,10 +273,11 @@ export const retryOnFailure = async (operationFn, maxRetries = 3) => {
       }
       
       // Yeniden deneme sayacını artır
+      const currentRetries = retries; // ESLint uyarısını önlemek için değeri kopyala
       retries++;
       
       // Kısa bir bekleme süresi ekle
-      await new Promise(resolve => setTimeout(resolve, 1000 * retries));
+      await new Promise(resolve => setTimeout(resolve, 1000 * (currentRetries + 1)));
     }
   }
 };
@@ -301,12 +327,63 @@ export const getTransactionStatus = async (txId) => {
 // İşlem verilerini getir
 export const getTransactionData = async (txId) => {
   return retryOnFailure(async () => {
-    const data = await arweave.transactions.getData(txId, {
-      decode: true,
-      string: true
-    });
-    
-    return data;
+    try {
+      // Önce standart yöntemle deneyelim
+      const data = await arweave.transactions.getData(txId, {
+        decode: true,
+        string: true
+      });
+      
+      // Eğer veri '[object Object]' şeklindeyse, raw endpoint ile tekrar deneyelim
+      if (data === '[object Object]') {
+        console.warn(`Standart yöntemle veri [object Object] olarak alındı: ${txId}, raw endpoint deneniyor...`);
+        throw new Error('Veri [object Object] formatında, raw endpoint ile deneniyor');
+      }
+      
+      return data;
+    } catch (error) {
+      console.log(`Standart yöntemle veri alınamadı: ${txId}, raw endpoint deneniyor...`);
+      
+      // Raw endpoint'i deneyelim (arweave.net/raw/TX_ID formatında)
+      const gateway = arweave.api.config.host;
+      const protocol = arweave.api.config.protocol;
+      const rawUrl = `${protocol}://${gateway}/raw/${txId}`;
+      
+      try {
+        const response = await fetch(rawUrl);
+        if (!response.ok) {
+          throw new Error(`Raw endpoint yanıt vermedi: ${response.status} ${response.statusText}`);
+        }
+        
+        // İçerik türünü kontrol et
+        const contentType = response.headers.get('content-type');
+        
+        // Response içeriğini al
+        const responseText = await response.text();
+        
+        // Veri '[object Object]' şeklindeyse boş bir nesne döndür
+        if (responseText === '[object Object]') {
+          console.warn(`Raw endpoint verisi [object Object] olarak alındı: ${txId}`);
+          return {};
+        }
+        
+        // JSON parse etmeyi dene
+        if (contentType && contentType.includes('application/json')) {
+          try {
+            return JSON.parse(responseText);
+          } catch (parseError) {
+            console.warn(`JSON parse hatası: ${parseError.message}`);
+            return responseText;
+          }
+        } else {
+          // Diğer formatlar için metin olarak dön
+          return responseText;
+        }
+      } catch (rawError) {
+        console.error(`Raw endpoint başarısız oldu: ${rawError.message}`);
+        throw error; // Orijinal hatayı fırlat
+      }
+    }
   });
 };
 
@@ -381,7 +458,8 @@ export const checkConnection = async () => {
   }
 };
 
-export default {
+// default export için nesneyi önce bir değişkene ata
+const arweaveExports = {
   arweave,
   retryOnFailure,
   sendTransaction,
@@ -392,3 +470,5 @@ export default {
   getWalletBalance,
   checkConnection
 };
+
+export default arweaveExports;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { CONTENT_TYPES } from '../../utils/constants';
 
-const RecommendationCard = ({ item, contentType, score, hideMatchScore, badgeText }) => {
+const HomeRecommendationCard = ({ item, contentType, score }) => {
   const isMovie = contentType === CONTENT_TYPES.MOVIE;
   const linkPath = isMovie ? `/movies/${item.hash}` : `/tvshows/${item.hash}`;
 
@@ -11,7 +11,7 @@ const RecommendationCard = ({ item, contentType, score, hideMatchScore, badgeTex
       <Link to={linkPath} className="recommendation-link">
         <div className="recommendation-image">
           <img 
-            src={item.poster_path || `/placeholder-${contentType}.png`}
+            src={item.imagePath ? `https://${item.imagePath}` : `/placeholder-${contentType}.png`}
             alt={item.title}
             onError={(e) => {
               e.target.onerror = null;
@@ -19,16 +19,9 @@ const RecommendationCard = ({ item, contentType, score, hideMatchScore, badgeTex
             }}
           />
           <div className="recommendation-overlay">
-            {!hideMatchScore && score && (
-              <div className="match-score">
-                {Math.round(score * 100)}% Match
-              </div>
-            )}
-            {badgeText && (
-              <div className="badge-text">
-                {badgeText}
-              </div>
-            )}
+            <div className="match-score">
+              {Math.round(score * 100)}% Match
+            </div>
           </div>
         </div>
         
@@ -45,9 +38,6 @@ const RecommendationCard = ({ item, contentType, score, hideMatchScore, badgeTex
             {isMovie && item.duration && (
               <span className="duration"> • {item.duration}</span>
             )}
-            {!isMovie && item.seasons && (
-              <span className="seasons"> • {item.seasons} Sezon</span>
-            )}
           </div>
         </div>
       </Link>
@@ -55,4 +45,4 @@ const RecommendationCard = ({ item, contentType, score, hideMatchScore, badgeTex
   );
 };
 
-export default RecommendationCard;
+export default HomeRecommendationCard; 

@@ -12,10 +12,7 @@ const CommentList = ({ itemId, itemType }) => {
     loading, 
     error, 
     fetchComments, 
-    userComment,
-    isEditing,
-    setIsEditing,
-    addOrUpdateComment
+    userComment
   } = useComments(itemId, itemType);
   
   const { walletAddress } = useAuth();
@@ -41,7 +38,6 @@ const CommentList = ({ itemId, itemType }) => {
     comments: comments?.length || 0,
     itemId,
     itemType,
-    isEditing,
     walletAddress
   });
   
@@ -52,7 +48,7 @@ const CommentList = ({ itemId, itemType }) => {
 
   return (
     <div className="community-section">
-      <h2>Topluluk Değerlendirmeleri</h2>
+      <h2>Community Reviews</h2>
 
       {/* DirectCommentForm'a tüm gerekli props'ları geçiyoruz */}
       <DirectCommentForm
@@ -62,18 +58,18 @@ const CommentList = ({ itemId, itemType }) => {
       />
 
       <div className="comments-container">
-        <h3>Kullanıcı Değerlendirmeleri ({filteredComments.length})</h3>
+        <h3>User Reviews ({filteredComments.length})</h3>
 
         {loading ? (
-          <Loading message="Değerlendirmeler yükleniyor..." />
+          <Loading message="Loading reviews..." />
         ) : error ? (
           <div className="error-message">
-            <p>Değerlendirmeler yüklenirken hata oluştu: {error}</p>
+            <p>Error loading reviews: {error}</p>
           </div>
         ) : filteredComments && filteredComments.length > 0 ? (
           <div className="comments-list">
             {filteredComments.map(comment => {
-              console.log(`Yorum: ${comment.author} vs Kullanıcı: ${walletAddress}`);
+              console.log(`Comment: ${comment.author} vs User: ${walletAddress}`);
               const isUserOwnComment = walletAddress && comment.author && 
                 comment.author.toLowerCase() === walletAddress.toLowerCase();
               return (
@@ -86,7 +82,7 @@ const CommentList = ({ itemId, itemType }) => {
             })}
           </div>
         ) : (
-          <p className="no-comments">Henüz değerlendirme yok. İlk değerlendirmeyi siz yapın!</p>
+          <p className="no-comments">No reviews yet. Be the first to review!</p>
         )}
       </div>
     </div>

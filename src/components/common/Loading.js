@@ -1,14 +1,14 @@
 import React from 'react';
 
 /**
- * Yükleniyor animasyonu gösteren bileşen
- * @param {Object} props Bileşen özellikleri
- * @param {string} [props.size='medium'] Boyut - 'small', 'medium', 'large'
- * @param {string} [props.color='currentColor'] Renk - CSS renk değeri
- * @returns {JSX.Element} Loading bileşeni
+ * Component that shows loading animation
+ * @param {Object} props Component properties
+ * @param {string} [props.size='medium'] Size - 'small', 'medium', 'large'
+ * @param {string} [props.color='currentColor'] Color - CSS color value
+ * @returns {JSX.Element} Loading component
  */
 const Loading = ({ size = 'medium', color = 'currentColor' }) => {
-  // Boyuta göre boyutları belirle
+  // Determine dimensions based on size
   const sizeMap = {
     small: { width: '16px', height: '16px', borderWidth: '2px' },
     medium: { width: '24px', height: '24px', borderWidth: '3px' },
@@ -17,7 +17,7 @@ const Loading = ({ size = 'medium', color = 'currentColor' }) => {
 
   const { width, height, borderWidth } = sizeMap[size] || sizeMap.medium;
 
-  // Temel stil
+  // Base style
   const style = {
     width,
     height,
@@ -38,7 +38,7 @@ const Loading = ({ size = 'medium', color = 'currentColor' }) => {
         }
         `}
       </style>
-      <div style={style} role="status" aria-label="Yükleniyor"></div>
+      <div style={style} role="status" aria-label="Loading"></div>
     </>
   );
 };

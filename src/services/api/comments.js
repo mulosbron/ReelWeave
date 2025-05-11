@@ -113,106 +113,162 @@ class CommentsService {
   }
 
   async processCommentsWithUpdates(transactions) {
-    if (!transactions || !transactions.length) return [];
+    if (!transactions || !transactions.length) {
+      console.log('No transactions to process');
+      return [];
+    }
     
-    console.log(`${transactions.length} işlem işleniyor`);
+    console.log(`Processing ${transactions.length} transactions`);
     
-    // Her kullanıcının her öğe için en son yorumunu takip et - kullanıcı+öğe anahtarı
-    const latestCommentsByUserAndItem = new Map();
+    // Track all comments directly
+    const allComments = [];
     
+    // Process each transaction
     for (const edge of transactions) {
       try {
         const node = edge.node;
         
-        // Tag'leri bir objeye dönüştür
-        const tags = node.tags.reduce((acc, tag) => {
-          acc[tag.name] = tag.value;
-          return acc;
-        }, {});
+        // Convert tags to an object (case insensitive)
+        const tags = {};
+        node.tags.forEach(tag => {
+          tags[tag.name.toLowerCase()] = tag.value;
+        });
         
-        // Öğe kimliklerini kontrol et
-        const itemId = tags['Item-Id'];
-        const itemType = tags['Item-Type'];
-        const action = tags['Action'];
-        const userAddress = tags['User-Address'];
-        
-        // Debug için yazdır
-        console.log(`İşlem ${node.id}: Action=${action}, ItemId=${itemId}, ItemType=${itemType}, User=${userAddress}`);
-        
-        // Yorum olmayan eylemleri atla
-        if (![ACTIONS.ADD_COMMENT, ACTIONS.UPDATE_COMMENT].includes(action)) {
-          console.log(`İşlem atlanıyor ${node.id} - yorum işlemi değil`);
-          continue;
-        }
-        
-        // İtemId, ItemType veya UserAddress eksikse atla
-        if (!itemId || !itemType || !userAddress) {
-          console.log(`İşlem atlanıyor ${node.id} - gerekli etiketler eksik`);
-          continue;
-        }
-  
-        // Benzersiz bir kullanıcı+öğe anahtarı oluştur
-        const userItemKey = `${userAddress}-${itemId}-${itemType}`;
-        
-        // Mevcut bir yorum var mı kontrol et
-        const existingComment = latestCommentsByUserAndItem.get(userItemKey);
-        
-        // Timestamp veya block height kontrolü ile en yenisini belirle
-        // Eğer mevcut yorumun timestamp'i daha büyükse, bu işlemi atla (daha eski demektir)
-        if (existingComment) {
-          const existingTimestamp = existingComment.timestamp || 0;
-          const currentTimestamp = node.block?.timestamp || 0;
+        // Check for various tag naming formats
+        const itemId = 
+          tags['item-id'] || 
+          tags['itemid'] || 
+          tags['content-id'] || 
+          tags['contentid'] || 
+          tags['video-id'] || 
+          tags['videoid'];
           
-          if (existingTimestamp > currentTimestamp) {
-            console.log(`İşlem atlanıyor ${node.id} - daha yeni bir yorum zaten var`);
-            continue;
-          }
+        const itemType = 
+          tags['item-type'] || 
+          tags['itemtype'] || 
+          tags['content-type'] || 
+          tags['contenttype'] || 
+          tags['type'];
+          
+        const action = 
+          (tags['action'] || '').toLowerCase();
+          
+        const userAddress = 
+          tags['user-address'] || 
+          tags['useraddress'] || 
+          tags['user-id'] || 
+          tags['userid'] || 
+          tags['wallet-address'] || 
+          tags['walletaddress'];
+          
+        const rating = 
+          tags['rating'] ? parseInt(tags['rating']) : null;
+        
+        // Debug log
+        console.log(`Processing transaction ${node.id}: Action=${action}, ItemId=${itemId}, ItemType=${itemType}, User=${userAddress}`);
+        
+        // Check if this is a comment action (be more inclusive with action types)
+        const isCommentAction = 
+          action === 'add-comment' || 
+          action === 'update-comment' || 
+          action === 'comment' || 
+          action === 'add_comment' || 
+          action === 'update_comment';
+          
+        if (!isCommentAction) {
+          console.log(`Skipping transaction ${node.id} - not a comment action (${action})`);
+          continue;
         }
+        
+        // Skip if missing required tags
+        if (!itemId || !userAddress) {
+          console.log(`Skipping transaction ${node.id} - missing required tags: ItemId=${itemId}, User=${userAddress}`);
+          continue;
+        }
+        
+        // Create a basic comment from tags
+        const timestamp = node.block?.timestamp || Math.floor(Date.now() / 1000);
+        const comment = {
+          id: node.id,
+          content: 'No content available',
+          author: userAddress,
+          itemId: itemId,
+          itemType: itemType || 'unknown', // Provide a default value
+          rating: rating,
+          createdAt: new Date(timestamp * 1000).toISOString(),
+          updatedAt: new Date(timestamp * 1000).toISOString(),
+          timestamp: timestamp,
+          blockHeight: node.block?.height || 0,
+          txId: node.id
+        };
         
         try {
-          // İşlem verisini getir
+          // Try to get transaction data
           const data = await arweaveClient.getTransactionData(node.id);
-          if (!data) {
-            console.log(`İşlem atlanıyor ${node.id} - veri yok`);
-            continue;
-          }
           
-          try {
-            const parsedData = JSON.parse(data);
-            console.log(`İşlem ${node.id} verisi:`, parsedData);
-            
-            // Bu yorumu, bu kullanıcının bu öğe için en son yorumu olarak sakla
-            latestCommentsByUserAndItem.set(userItemKey, {
-              id: node.id,
-              ...parsedData,
-              author: userAddress,
-              itemId: itemId,
-              itemType: itemType,
-              rating: tags['Rating'] ? parseInt(tags['Rating']) : null,
-              timestamp: node.block?.timestamp,
-              blockHeight: node.block?.height || 0,
-              txId: node.id,
-              action: action
-            });
-            
-            console.log(`Yorum güncellendi/eklendi: ${userItemKey}`);
-          } catch (parseError) {
-            console.error(`İşlem verisi ayrıştırılırken hata oluştu: ${node.id}:`, parseError);
+          // If data exists, try to parse it
+          if (data) {
+            try {
+              const parsedData = typeof data === 'object' && data !== null ? data : JSON.parse(data);
+              
+              // Update comment with parsed data
+              if (parsedData.content) {
+                comment.content = parsedData.content;
+              }
+              if (parsedData.rating && !isNaN(parsedData.rating)) {
+                comment.rating = parseInt(parsedData.rating);
+              }
+              if (parsedData.itemType && !comment.itemType) {
+                comment.itemType = parsedData.itemType;
+              }
+              if (parsedData.createdAt) {
+                comment.createdAt = parsedData.createdAt;
+              }
+              if (parsedData.updatedAt) {
+                comment.updatedAt = parsedData.updatedAt;
+              }
+            } catch (parseError) {
+              console.error(`JSON parse error for ${node.id}:`, parseError);
+              // Continue with the basic comment from tags
+            }
           }
         } catch (dataError) {
-          console.error(`İşlem verisi getirilirken hata oluştu: ${node.id}:`, dataError);
+          console.error(`Error getting transaction data (${node.id}):`, dataError);
+          // Continue with the basic comment from tags
         }
+        
+        // Add to comments array
+        allComments.push(comment);
+        console.log(`Added comment from ${userAddress} for ${comment.itemType} ${itemId}`);
+        
       } catch (error) {
-        console.error(`İşlem işlenirken hata oluştu ${edge?.node?.id}:`, error);
+        console.error('Error processing transaction:', error);
+        continue;
       }
     }
     
-    // Haritayı diziye dönüştür ve zaman damgasına göre sırala (en yenisi en üstte)
-    const comments = Array.from(latestCommentsByUserAndItem.values())
-      .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    console.log(`Processed ${allComments.length} comments from all users`);
     
-    console.log(`${comments.length} yorum işlendi ve döndürüldü`);
-    return comments;
+    // Find the latest comment for each user+item combination
+    const latestCommentsByUserAndItem = new Map();
+    
+    for (const comment of allComments) {
+      const userItemKey = `${comment.author}-${comment.itemId}-${comment.itemType}`;
+      
+      // Check if we already have a comment for this user+item
+      const existingComment = latestCommentsByUserAndItem.get(userItemKey);
+      
+      // Determine which is newer using timestamp
+      if (!existingComment || (comment.timestamp > existingComment.timestamp)) {
+        latestCommentsByUserAndItem.set(userItemKey, comment);
+      }
+    }
+    
+    // Convert map to array and return comments
+    const uniqueComments = Array.from(latestCommentsByUserAndItem.values());
+    console.log(`Returning ${uniqueComments.length} unique comments`);
+    
+    return uniqueComments;
   }
 
   // Kullanıcının belirli bir öğe için yorumu var mı kontrol et
@@ -273,7 +329,8 @@ class CommentsService {
       
       // Verileri ayrıştır
       try {
-        const parsedData = JSON.parse(data);
+        // Eğer data zaten bir nesne ise, JSON.parse etmeye gerek yok
+        const parsedData = typeof data === 'object' && data !== null ? data : JSON.parse(data);
         console.log(`İşlem verisi ayrıştırıldı:`, parsedData);
         
         // Tag'leri bir objeye dönüştür
@@ -300,6 +357,35 @@ class CommentsService {
         return comment;
       } catch (parseError) {
         console.error(`İşlem verisi ayrıştırılırken hata oluştu: ${latestCommentNode.id}`, parseError);
+        
+        // Parse hatası durumunda tag'lerden bir yorum oluşturmayı dene
+        if (data === '[object Object]' || parseError instanceof SyntaxError) {
+          console.log(`JSON parse hatası, tag'lerden yorum oluşturuluyor: ${latestCommentNode.id}`);
+          
+          // Tag'leri bir objeye dönüştür
+          const tags = latestCommentNode.tags.reduce((acc, tag) => {
+            acc[tag.name] = tag.value;
+            return acc;
+          }, {});
+          
+          // Sadece tag'lerdeki bilgilerle yorum oluştur
+          const comment = {
+            id: latestCommentNode.id,
+            content: tags['Content'] || '',
+            author: tags['User-Address'],
+            itemId: tags['Item-Id'],
+            itemType: tags['Item-Type'],
+            rating: tags['Rating'] ? parseInt(tags['Rating']) : null,
+            timestamp: latestCommentNode.block?.timestamp,
+            blockHeight: latestCommentNode.block?.height,
+            txId: latestCommentNode.id,
+            action: tags['Action']
+          };
+          
+          console.log(`Tag'lerden yorum oluşturuldu:`, comment);
+          return comment;
+        }
+        
         return null;
       }
     } catch (error) {
@@ -406,21 +492,39 @@ class CommentsService {
         return null;
       }
       
-      const parsedData = JSON.parse(data);
-      
       // Tag'leri bir objeye dönüştür
       const tags = transaction.tags.reduce((acc, tag) => {
         acc[tag.name] = tag.value;
         return acc;
       }, {});
       
-      return {
-        id: txId,
-        ...parsedData,
-        rating: tags['Rating'] ? parseInt(tags['Rating']) : null,
-        timestamp: transaction.block?.timestamp,
-        blockHeight: transaction.block?.height
-      };
+      try {
+        // Eğer data zaten bir nesne ise, JSON.parse etmeye gerek yok
+        const parsedData = typeof data === 'object' && data !== null ? data : JSON.parse(data);
+        
+        return {
+          id: txId,
+          ...parsedData,
+          rating: tags['Rating'] ? parseInt(tags['Rating']) : null,
+          timestamp: transaction.block?.timestamp,
+          blockHeight: transaction.block?.height
+        };
+      } catch (parseError) {
+        console.error(`İşlem verisi ayrıştırılırken hata oluştu: ${txId}`, parseError);
+        
+        // Parse hatası durumunda tag'lerden bir yorum oluşturmayı dene
+        if (data === '[object Object]' || parseError instanceof SyntaxError) {
+          return {
+            id: txId,
+            content: tags['Content'] || '',
+            rating: tags['Rating'] ? parseInt(tags['Rating']) : null,
+            timestamp: transaction.block?.timestamp,
+            blockHeight: transaction.block?.height
+          };
+        }
+        
+        return null;
+      }
     } catch (error) {
       console.error('Error fetching comment by txId:', error);
       return null;

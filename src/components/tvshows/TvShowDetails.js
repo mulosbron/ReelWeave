@@ -1,19 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import useLists from '../../hooks/useLists';
 import { LIST_TYPES, CONTENT_TYPES } from '../../utils/constants';
 import CommentList from '../comments/CommentList';
+import { commentsService } from '../../services/api/comments';
+import { listsService } from '../../services/api/lists';
 
 const TvShowDetails = ({ tvshow }) => {
   const navigate = useNavigate();
   const { isConnected, walletAddress } = useAuth();
   const { 
-    addToList, 
     removeFromList, 
     isItemInList, 
     loading: listLoading 
   } = useLists();
+  
+  // Kullanıcı değerlendirmeleri için state
+  const [userRatings, setUserRatings] = useState({
+    average: 0,
+    count: 0,
+    loading: true,
+    error: null
+  });
+
+  // Kullanıcı değerlendirmelerini getir
+  useEffect(() => {
+    const fetchUserRatings = async () => {
+      const tvShowId = tvshow?.id || tvshow?.hash || window.location.pathname.split('/').pop();
+      if (!tvShowId) return;
+      
+      try {
+        setUserRatings(prev => ({
+          ...prev,
+          loading: true,
+          error: null
+        }));
+        
+        const ratingData = await commentsService.getAverageRating(
+          tvShowId, 
+          CONTENT_TYPES.TV_SHOW
+        );
+        
+        setUserRatings(prev => ({
+          ...prev,
+          average: ratingData.average,
+          count: ratingData.count,
+          loading: false,
+          error: null
+        }));
+        
+      } catch (error) {
+        console.error('Error fetching user ratings:', error);
+        setUserRatings(prev => ({
+          ...prev,
+          average: 0,
+          count: 0,
+          loading: false,
+          error: 'Failed to load ratings'
+        }));
+      }
+    };
+    
+    fetchUserRatings();
+  }, [tvshow]);
 
   // API'den gelen verilerin imagePath'ini tam URL'ye dönüştür
   const getFullImageUrl = (imagePath) => {
@@ -32,29 +82,49 @@ const TvShowDetails = ({ tvshow }) => {
     return imagePath;
   };
 
+  // Handle list actions
   const handleAddToList = async (listType) => {
     if (!isConnected) {
-      // Redirect to home to connect
+      console.log("Cüzdan bağlı değil, ana sayfaya yönlendiriliyor");
+      window.alert("Bu işlemi gerçekleştirmek için cüzdanınızı bağlamanız gerekiyor.");
       navigate('/');
       return;
     }
 
+    const tvShowId = tvshow?.id || tvshow?.hash || window.location.pathname.split('/').pop();
+    
+    if (!tvShowId) {
+      console.error("Dizi ID'si bulunamadı", tvshow);
+      window.alert("Dizi ID'si bulunamadı, işlem yapılamıyor");
+      return;
+    }
+
     try {
-      const inList = isItemInList(tvshow.hash, listType);
+      console.log(`Liste işlemi başlatılıyor: ${listType}`, tvShowId);
+      const inList = isItemInList(tvShowId, listType);
       
       if (inList) {
-        await removeFromList(tvshow.hash, listType);
+        console.log(`Diziden kaldırılıyor: ${tvShowId}, liste tipi: ${listType}`);
+        await removeFromList(tvShowId, listType);
       } else {
-        await addToList(
-          tvshow.hash,
+        console.log(`Diziye ekleniyor: ${tvShowId}, liste tipi: ${listType}`);
+        const result = await listsService.addToList(
+          tvShowId,
           CONTENT_TYPES.TV_SHOW,
           listType,
           walletAddress,
-          { title: tvshow.title, year: tvshow.year, poster: tvshow.imagePath }
+          { 
+            title: tvshow.title, 
+            year: tvshow.year, 
+            poster: tvshow.imagePath,
+            rating: tvshow.rating
+          }
         );
+        console.log("Liste ekleme sonucu:", result);
       }
     } catch (error) {
-      console.error('Error updating list:', error);
+      console.error('Liste güncelleme hatası:', error);
+      window.alert(`Liste güncelleme hatası: ${error.message}`);
     }
   };
 
@@ -79,43 +149,50 @@ const TvShowDetails = ({ tvshow }) => {
         <div className="details-info">
           <h1 className="tvshow-title">{tvshow.title}</h1>
           
-          <div className="tvshow-meta">
-            <span>{tvshow.year}</span>
-            <span className="separator">•</span>
-            <span>{tvshow.episodes}</span>
-            <span className="separator">•</span>
-            <span>{tvshow.ageRating}</span>
-          </div>
-          
           <div className="tvshow-rating">
             <span className="rating-star">★</span> 
-            <span>{tvshow.rating}</span>
-            <span className="rating-scale">/10</span>
+            <span>
+              {userRatings.loading ? "Loading..." : 
+               userRatings.error ? "Error loading ratings" :
+               userRatings.count > 0 ? userRatings.average : "No ratings yet"}
+            </span>
+            <span className="rating-scale">
+              {userRatings.count > 0 ? "/5" : ""}
+            </span>
+            <span className="rating-source">
+              {userRatings.count > 0 ? `(${userRatings.count}) ReelWeave users` : "ReelWeave users"}
+            </span>
           </div>
           
           <div className="tvshow-actions">
             <button 
-              className={`list-button ${isItemInList(tvshow.hash, LIST_TYPES.WATCHLIST) ? 'in-list' : ''}`}
+              className={`list-button ${isItemInList(tvshow?.id || tvshow?.hash || window.location.pathname.split('/').pop(), LIST_TYPES.WATCHLIST) ? 'in-list' : ''}`}
               onClick={() => handleAddToList(LIST_TYPES.WATCHLIST)}
               disabled={listLoading}
             >
-              {isItemInList(tvshow.hash, LIST_TYPES.WATCHLIST) ? 'In Watchlist' : 'Add to Watchlist'}
+              {isItemInList(tvshow?.id || tvshow?.hash || window.location.pathname.split('/').pop(), LIST_TYPES.WATCHLIST) 
+                ? <><span className="list-icon">✓</span> In Watchlist</> 
+                : <><span className="list-icon">+</span> Add to Watchlist</>}
             </button>
             
             <button 
-              className={`list-button ${isItemInList(tvshow.hash, LIST_TYPES.WATCHED) ? 'in-list' : ''}`}
+              className={`list-button ${isItemInList(tvshow?.id || tvshow?.hash || window.location.pathname.split('/').pop(), LIST_TYPES.WATCHED) ? 'in-list' : ''}`}
               onClick={() => handleAddToList(LIST_TYPES.WATCHED)}
               disabled={listLoading}
             >
-              {isItemInList(tvshow.hash, LIST_TYPES.WATCHED) ? 'Watched' : 'Mark as Watched'}
+              {isItemInList(tvshow?.id || tvshow?.hash || window.location.pathname.split('/').pop(), LIST_TYPES.WATCHED) 
+                ? <><span className="list-icon">✓</span> Watched</> 
+                : <><span className="list-icon">👁</span> Mark as Watched</>}
             </button>
             
             <button 
-              className={`list-button ${isItemInList(tvshow.hash, LIST_TYPES.FAVORITES) ? 'in-list' : ''}`}
+              className={`list-button ${isItemInList(tvshow?.id || tvshow?.hash || window.location.pathname.split('/').pop(), LIST_TYPES.FAVORITES) ? 'in-list' : ''}`}
               onClick={() => handleAddToList(LIST_TYPES.FAVORITES)}
               disabled={listLoading}
             >
-              {isItemInList(tvshow.hash, LIST_TYPES.FAVORITES) ? 'Favorite' : 'Add to Favorites'}
+              {isItemInList(tvshow?.id || tvshow?.hash || window.location.pathname.split('/').pop(), LIST_TYPES.FAVORITES) 
+                ? <><span className="list-icon">★</span> Favorite</> 
+                : <><span className="list-icon">☆</span> Add to Favorites</>}
             </button>
           </div>
           
@@ -127,8 +204,26 @@ const TvShowDetails = ({ tvshow }) => {
       </div>
 
       <div className="tvshow-additional-info">
-        <h2>Additional Information</h2>
+        <h2>Information</h2>
         <div className="info-grid">
+          <div className="info-item">
+            <span className="info-label">Year</span>
+            <span className="info-value">{tvshow.year || "Not available"}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Episodes</span>
+            <span className="info-value">{tvshow.episodes || "Not available"}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Age Rating</span>
+            <span className="info-value">{tvshow.ageRating || "Not available"}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">IMDB Rating</span>
+            <span className="info-value">
+              {tvshow.rating ? `${tvshow.rating}/10` : "Not available"}
+            </span>
+          </div>
           <div className="info-item">
             <span className="info-label">Creator</span>
             <span className="info-value">{tvshow.creator || "Not available"}</span>
@@ -141,16 +236,12 @@ const TvShowDetails = ({ tvshow }) => {
             <span className="info-label">Genre</span>
             <span className="info-value">{tvshow.genre || "Not available"}</span>
           </div>
-          <div className="info-item">
-            <span className="info-label">Episodes</span>
-            <span className="info-value">{tvshow.episodes}</span>
-          </div>
         </div>
       </div>
       
-      {/* Yorum bileşeni */}
+      {/* Yorum bileşeni - URL'den alınan ID'yi kullanalım */}
       <CommentList 
-        itemId={tvshow.hash} 
+        itemId={tvshow?.id || tvshow?.hash || window.location.pathname.split('/').pop()} 
         itemType={CONTENT_TYPES.TV_SHOW} 
       />
     </div>

@@ -1,9 +1,10 @@
 // components/comments/CommentItem.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const CommentItem = ({ comment, isUserComment }) => {
   const formatAddress = (address) => {
-    if (!address) return 'Anonim';
+    if (!address) return 'Anonymous';
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
@@ -14,70 +15,94 @@ const CommentItem = ({ comment, isUserComment }) => {
       const diffInDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
 
       if (isNaN(date.getTime())) {
-        return 'geçersiz tarih';
+        return 'invalid date';
       }
 
       if (diffInDays === 0) {
-        return 'Bugün';
+        return 'Today';
       } else if (diffInDays === 1) {
-        return 'Dün';
+        return 'Yesterday';
       } else if (diffInDays < 7) {
-        return `${diffInDays} gün önce`;
+        return `${diffInDays} days ago`;
       } else if (diffInDays < 30) {
-        return `${Math.floor(diffInDays / 7)} hafta önce`;
+        return `${Math.floor(diffInDays / 7)} weeks ago`;
       } else {
-        return date.toLocaleDateString('tr-TR');
+        return date.toLocaleDateString('en-US');
       }
     } catch (error) {
       console.error("Error formatting date:", dateString, error);
-      return 'Yakın zamanda';
+      return 'Recently';
     }
   };
 
   const renderStars = (rating) => {
-    const numRating = Number(rating);
     return (
       <div className="comment-rating">
         {[1, 2, 3, 4, 5].map((star) => (
           <span
             key={star}
-            className={`star ${star <= numRating ? 'filled' : 'empty'}`}
+            className={`star ${star <= rating ? 'filled' : 'empty'}`}
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill={star <= numRating ? 'currentColor' : 'none'}
-              stroke="currentColor"
-              strokeWidth="2"
-              width="16"
-              height="16"
-            >
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
+            ★
           </span>
         ))}
       </div>
     );
   };
 
+  // Get content URL based on type
+  const getContentUrl = () => {
+    if (!comment.itemId) return '#';
+    if (comment.itemType?.toLowerCase() === 'movie') {
+      return `/movie/${comment.itemId}`;
+    } else if (comment.itemType?.toLowerCase() === 'tvshow') {
+      return `/tvshow/${comment.itemId}`;
+    }
+    return '#';
+  };
+
   return (
     <div className={`comment-item ${isUserComment ? 'user-comment' : ''}`}>
       <div className="comment-header">
         <div className="comment-author">
-          <div className="author-address">
-            {formatAddress(comment.author)}
-            {isUserComment && <span className="user-badge">Siz</span>}
+          <div className="author-info">
+            <span className="wallet-address">{formatAddress(comment.author)}</span>
+            {isUserComment && <span className="user-badge">You</span>}
           </div>
           {renderStars(comment.rating || 0)}
         </div>
         <div className="comment-date">
           {comment.updatedAt && comment.updatedAt !== comment.createdAt
-            ? `Güncellendi: ${formatDate(comment.updatedAt)}`
+            ? `Updated: ${formatDate(comment.updatedAt)}`
             : formatDate(comment.createdAt)}
         </div>
       </div>
+      
+      {comment.itemTitle && (
+        <div className="comment-item-content">
+          <Link to={getContentUrl()} className="content-link">
+            <div className="content-type-badge">{comment.itemType === 'movie' ? 'Movie' : 'TV Show'}</div>
+            <span className="content-title">{comment.itemTitle}</span>
+          </Link>
+        </div>
+      )}
+      
       <div className="comment-content">
         <p>{comment.content}</p>
       </div>
+      
+      {comment.txId && (
+        <div className="transaction-info">
+          <a 
+            href={`https://viewblock.io/arweave/tx/${comment.txId}`} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="transaction-link"
+          >
+            <span className="tx-label">TX:</span> {comment.txId.slice(0, 6)}...{comment.txId.slice(-6)}
+          </a>
+        </div>
+      )}
     </div>
   );
 };

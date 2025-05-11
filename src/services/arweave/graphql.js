@@ -86,7 +86,7 @@ const retryQuery = async (queryString, variables) => {
 
 // Etiketlere göre işlem bul
 export const findTransactionsByTags = async (tags = []) => {
-  // GraphQL sorgu metni
+  // GraphQL sorgu metnini hazırla
   const queryString = `
     query($tags: [TagFilter!]!) {
       transactions(
@@ -117,17 +117,86 @@ export const findTransactionsByTags = async (tags = []) => {
     }
   `;
 
+  // GraphQL sorgu değişkenlerini normalize et
+  const normalizedTags = tags.map(tag => {
+    return {
+      name: tag.name,
+      values: Array.isArray(tag.values) ? tag.values : [tag.value || tag.values]
+    };
+  });
+
   // GraphQL sorgu değişkenleri
   const variables = {
-    tags: tags
+    tags: normalizedTags
   };
+
+  console.log('Normalize edilmiş tag değişkenleri:', variables);
 
   try {
     const data = await query(queryString, variables);
+    
+    // Hiç sonuç yoksa boş array döndür
+    if (!data || !data.transactions || !data.transactions.edges) {
+      console.log('Hiç transaction bulunamadı');
+      return [];
+    }
+    
     return data.transactions.edges.map(edge => edge.node);
   } catch (error) {
     console.error('İşlem arama hatası:', error);
-    throw error;
+    
+    // Alternatif bir sorgu şeması deneyelim
+    if (error.message && error.message.includes('400')) {
+      try {
+        console.log('Alternatif sorgu şeması deneniyor...');
+        // Alternatif sorgu - tek bir etiket üzerinden
+        const altQueryString = `
+          query {
+            transactions(
+              tags: [
+                { name: "${tags[0].name}", values: ${JSON.stringify(Array.isArray(tags[0].values) ? tags[0].values : [tags[0].value || tags[0].values])} }
+              ],
+              first: 100, 
+              sort: HEIGHT_DESC
+            ) {
+              edges {
+                node {
+                  id
+                  owner {
+                    address
+                  }
+                  data {
+                    size
+                  }
+                  tags {
+                    name
+                    value
+                  }
+                  block {
+                    height
+                    timestamp
+                  }
+                }
+              }
+            }
+          }
+        `;
+        
+        const altData = await query(altQueryString);
+        
+        if (!altData || !altData.transactions || !altData.transactions.edges) {
+          console.log('Alternatif sorguda da hiç transaction bulunamadı');
+          return [];
+        }
+        
+        return altData.transactions.edges.map(edge => edge.node);
+      } catch (altError) {
+        console.error('Alternatif işlem arama hatası:', altError);
+        return [];
+      }
+    }
+    
+    return [];
   }
 };
 
@@ -208,10 +277,14 @@ export const findTransactionsByOwner = async (owner, first = 100) => {
   }
 };
 
-export default {
+// Modülü dışa aktar
+const graphqlService = {
   query,
-  updateEndpoint,
   findTransactionsByTags,
   findTransactionById,
-  findTransactionsByOwner
+  findTransactionsByOwner,
+  updateEndpoint,
+  get endpoint() { return endpoint; }
 };
+
+export default graphqlService;
