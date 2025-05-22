@@ -1,21 +1,21 @@
 // Application Constants
-export const APP_NAME = process.env.REACT_APP_NAME || 'ReelWeave';
-export const APP_VERSION = process.env.REACT_APP_VERSION || '0.1.0';
+export const APP_NAME = 'ReelWeave';
+export const APP_VERSION = '0.1.0';
 
 // Arweave Configuration
 export const ARWEAVE_CONFIG = {
-  host: process.env.REACT_APP_ARWEAVE_HOST || 'arweave.net',
-  port: process.env.REACT_APP_ARWEAVE_PORT || 443,
-  protocol: process.env.REACT_APP_ARWEAVE_PROTOCOL || 'https',
+  host: 'arweave.net',
+  port: 443,
+  protocol: 'https',
   timeout: 20000,
   logging: false,
 };
 
 // API Endpoints
 export const API_ENDPOINTS = {
-  MOVIES: process.env.REACT_APP_MOVIES_DATA_URL,
-  TV_SHOWS: process.env.REACT_APP_TVSHOWS_DATA_URL,
-  GRAPHQL: process.env.REACT_APP_ARWEAVE_GRAPHQL || 'https://arweave.net/graphql',
+  MOVIES: 'https://ik4eeegs7vksywspj3ee63td4uldwvvfgrh43hm3fkrgmpdzkvda.arweave.net/QrhCENL9VSxaT07IT25j5RY7VqU0T82dmyqiZjx5VUY',
+  TV_SHOWS: 'https://nknszx53psei7ixqiaiedrv7vlznqyvz5c4fchtz52ld5cedmuva.arweave.net/apss37t8iI-i8EAQQca_qvLYYrnouFEeee6WPoiDZSo',
+  GRAPHQL: 'https://arweave.net/graphql',
 };
 
 // Local Storage Keys
