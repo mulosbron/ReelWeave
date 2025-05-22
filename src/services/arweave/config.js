@@ -82,8 +82,8 @@ export const checkGatewayConnection = async (gateway) => {
   try {
     console.log(`Gateway ${gateway} bağlantısı test ediliyor...`);
     // Önce basit bir HTTP isteği ile hızlı kontrol
-    const healthCheck = await axios.head(`https://${gateway}/info`, { 
-      timeout: 5000 
+    const healthCheck = await axios.head(`https://${gateway}/ar-io/info`, { 
+      timeout: 20000 
     });
     
     if (healthCheck.status >= 200 && healthCheck.status < 300) {

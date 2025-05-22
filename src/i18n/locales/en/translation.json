@@ -1,0 +1,267 @@
+{
+  "app": {
+    "name": "ReelWeave"
+  },
+  "header": {
+    "home": "Home",
+    "movies": "Movies",
+    "tvShows": "TV Shows",
+    "community": "Community",
+    "myLists": "My Lists",
+    "all": "All"
+  },
+  "auth": {
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect",
+    "walletConnected": "Wallet Connected",
+    "connecting": "Connecting...",
+    "notDetected": "ArConnect Not Detected",
+    "notInstalledMessage": "ArConnect wallet extension is not installed in your browser.",
+    "installPrompt": "Please install ArConnect to connect your Arweave wallet.",
+    "install": "Install ArConnect",
+    "cancel": "Cancel",
+    "connectWalletForAction": "You need to connect your wallet to perform this action.",
+    "connectWalletFirst": "Please connect your wallet first"
+  },
+  "gateway": {
+    "select": "Select Gateway",
+    "current": "Current Gateway",
+    "switchSuccess": "Gateway changed: {{from}} -> {{to}}",
+    "switchError": "Failed to change gateway"
+  },
+  "community": {
+    "title": "Community",
+    "subtitle": "Meeting point for movie and TV show enthusiasts",
+    "favorites": "Community Favorites",
+    "favoritesDescription": "Most liked and favorited content",
+    "statistics": "Statistics",
+    "statisticsDescription": "Current status of ReelWeave community and platform",
+    "reviews": "Reviews",
+    "reviewsDescription": "Latest reviews from our community",
+    "movies": "Movies",
+    "tvShows": "TV Shows",
+    "users": "Users",
+    "activeUsers": "Active community members",
+    "totalMovies": "Total movies on platform",
+    "totalTvShows": "Total TV shows on platform",
+    "noFavorites": "No Favorites Yet",
+    "noFavoritesDescription": "No content has been favorited yet. Be the first to add a favorite!",
+    "browseMovies": "Browse Movies",
+    "browseTvShows": "Browse TV Shows",
+    "totalUsers": "Total Users",
+    "totalUsersDescription": "Total number of users on the platform",
+    "activeReviewers": "Active Reviewers",
+    "activeReviewersDescription": "Users who reviewed in the last 30 days",
+    "totalReviews": "Total Reviews",
+    "totalReviewsDescription": "Total number of reviews on the platform"
+  },
+  "home": {
+    "welcome": "Welcome to ReelWeave",
+    "tagline": "Your decentralized movie and TV show tracking platform powered by Arweave",
+    "browseMovies": "BROWSE MOVIES",
+    "browseTvShows": "BROWSE TV SHOWS",
+    "whyReelWeave": "Why ReelWeave?",
+    "features": {
+      "decentralized": {
+        "title": "Decentralized Storage",
+        "description": "Your watchlists and preferences are stored permanently on Arweave blockchain"
+      },
+      "community": {
+        "title": "Community Driven",
+        "description": "Share reviews and recommendations with the community"
+      },
+      "tracking": {
+        "title": "Personal Tracking",
+        "description": "Keep track of what you've watched and what you want to watch"
+      },
+      "recommendations": {
+        "title": "Smart Recommendations",
+        "description": "Get personalized suggestions based on your viewing history"
+      }
+    },
+    "getStarted": "Get Started",
+    "steps": [
+      "Connect your ArConnect wallet",
+      "Browse movies and TV shows",
+      "Create your personal watchlists",
+      "Share reviews with the community",
+      "Get personalized recommendations"
+    ]
+  },
+  "search": {
+    "searchMovies": "Search movies...",
+    "searchTvShows": "Search TV shows...",
+    "filters": "Filters",
+    "year": "Year",
+    "allYears": "All Years",
+    "minimumRating": "Minimum Rating",
+    "anyRating": "Any Rating",
+    "ageRating": "Age Rating",
+    "allRatings": "All Ratings",
+    "clearFilters": "Clear Filters"
+  },
+  "footer": {
+    "tagline": "Your decentralized movie and TV show tracking platform",
+    "version": "Version",
+    "quickLinks": "Quick Links",
+    "resources": "Resources",
+    "connectWithUs": "Connect With Us",
+    "builtWith": "Built with ❤️ on Arweave",
+    "features": "Decentralized • Permanent • Community-Driven",
+    "allRightsReserved": "All rights reserved.",
+    "disclaimer": "All movie and TV show data is sourced from public APIs and stored on Arweave blockchain."
+  },
+  "recommendations": {
+    "title": "Recommended for You",
+    "connectWallet": "Connect your wallet to get personalized movie and TV show recommendations based on your viewing history.",
+    "loading": "Generating recommendations...",
+    "error": "Failed to generate recommendations",
+    "startWatching": "Start watching and rating movies or TV shows to get personalized recommendations!",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right"
+  },
+  "movieDetail": {
+    "loading": "Loading movie details...",
+    "notFound": "Movie Not Found",
+    "notFoundMessage": "The requested movie could not be found.",
+    "backToMovies": "Back to Movies",
+    "idNotFound": "Movie ID not found, cannot perform action"
+  },
+  "tvShowDetail": {
+    "loading": "Loading TV show details...",
+    "notFound": "TV Show Not Found",
+    "notFoundMessage": "The requested TV show could not be found.",
+    "backToTvShows": "Back to TV Shows",
+    "idNotFound": "TV show ID not found, cannot perform action"
+  },
+  "lists": {
+    "watchlist": "Watchlist",
+    "watched": "Watched",
+    "favorites": "Favorites",
+    "addToWatchlist": "Add to Watchlist",
+    "addToWatched": "Mark as Watched",
+    "addToFavorites": "Add to Favorites",
+    "inWatchlist": "In Watchlist",
+    "inWatched": "Watched",
+    "inFavorites": "In Favorites",
+    "removeFromList": "Remove from list",
+    "manageLists": "Manage Lists",
+    "removedFrom": "Removed from",
+    "addedTo": "Added to",
+    "removeFrom": "Remove from {{list}}",
+    "addTo": "Add to {{list}}",
+    "in": "In",
+    "updateError": "List update error"
+  },
+  "pages": {
+    "movies": {
+      "title": "Movies",
+      "subtitle": "Discover and explore our collection of movies",
+      "loadingMessage": "Loading movies...",
+      "noMoviesFound": "No movies found with the current filters.",
+      "error": "Error loading movies:"
+    },
+    "tvShows": {
+      "title": "TV Shows",
+      "subtitle": "Discover and explore our collection of TV shows",
+      "loadingMessage": "Loading TV shows...",
+      "noShowsFound": "No TV shows found with the current filters.",
+      "error": "Error loading TV shows:"
+    },
+    "myLists": {
+      "title": "My Lists",
+      "subtitle": "Manage your personal movie and TV show lists",
+      "watchlist": "Watchlist",
+      "favorites": "Favorites",
+      "watched": "Watched",
+      "createList": "Create New List",
+      "noListsFound": "You don't have any lists yet.",
+      "connectWalletPrompt": "You need to connect your ArConnect wallet to view your lists.",
+      "connectWalletTitle": "Connect Your Wallet",
+      "loading": "Loading your lists...",
+      "lastUpdated": "Last Updated",
+      "refreshTooltip": "Refresh your lists",
+      "refreshing": "Refreshing...",
+      "refreshLists": "Refresh Lists",
+      "error": "Error loading lists"
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "The page you're looking for does not exist.",
+      "backToHome": "Back to Home"
+    }
+  },
+  "reviews": {
+    "communityReviews": "Community Reviews",
+    "userReviews": "User Reviews",
+    "loading": "Loading reviews...",
+    "error": "Error loading reviews",
+    "noReviews": "No reviews yet. Be the first to add a review!",
+    "noRatingsYet": "No ratings yet",
+    "writeReview": "Write a Review",
+    "yourReview": "Your Review",
+    "rating": "Your Rating:",
+    "comment": "Your Comment:",
+    "placeholder": "Share your thoughts about this content...",
+    "submit": "Submit Review",
+    "update": "Update Review",
+    "cancel": "Cancel",
+    "edited": "edited",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago",
+    "weeksAgo": "{{count}} weeks ago",
+    "anonymous": "Anonymous",
+    "you": "You",
+    "loginToReview": "Please connect your wallet to write a review.",
+    "users": "users",
+    "invalidDate": "invalid date",
+    "recently": "Recently"
+  },
+  "comments": {
+    "sending": "Sending...",
+    "error": {
+      "empty": "Comment cannot be empty",
+      "noRating": "Please provide a rating (1-5 stars)",
+      "notConnected": "Please connect your wallet first",
+      "missingItemInfo": "Item ID and type are required for comments",
+      "submitFailed": "Failed to submit comment",
+      "submitError": "Error submitting comment",
+      "transactionError": "Transaction error: {{status}}"
+    },
+    "successMessage": "Your comment has been submitted successfully. It may take a few minutes to be confirmed on the Arweave network.",
+    "commentPlaceholder": "Write your comment...",
+    "replyPlaceholder": "Write your reply...",
+    "reply": "Reply",
+    "comment": "Comment"
+  },
+  "content": {
+    "unknown": "Unknown Content",
+    "unknownMovie": "Unknown Movie",
+    "movie": "Movie",
+    "tvShow": "TV Show",
+    "year": "Year",
+    "usersFavorited": "users favorited",
+    "about": "About",
+    "information": "Information",
+    "episodes": "Episodes",
+    "ageRating": "Age Rating",
+    "imdbRating": "IMDB Rating",
+    "director": "Director",
+    "creator": "Creator",
+    "cast": "Cast",
+    "genre": "Genre",
+    "duration": "Duration",
+    "notAvailable": "Not available",
+    "season": "Season",
+    "seasons": "Seasons",
+    "movieDefaultDescription": "A classic film that has captivated audiences for generations.",
+    "tvShowDefaultDescription": "An acclaimed television series that has captivated audiences worldwide."
+  },
+  "language": {
+    "title": "Language",
+    "english": "English",
+    "turkish": "Türkçe"
+  },
+  "tryAgain": "Try Again"
+} 

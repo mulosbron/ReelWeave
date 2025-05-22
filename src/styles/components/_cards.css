@@ -51,6 +51,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  image-rendering: -webkit-optimize-contrast; /* Görüntü netliğini artırır */
+  backface-visibility: hidden; /* Pikselleşme sorununu azaltır */
+  transform: translateZ(0); /* GPU hızlandırma */
 }
 
 .movie-card-overlay,
@@ -124,4 +127,140 @@
 .add-to-list-buttons {
   display: flex;
   gap: var(--spacing-sm);
+}
+
+/* Responsive Card Styles */
+@media (max-width: 1024px) {
+  .movie-title,
+  .tvshow-title {
+    font-size: 1rem;
+  }
+  
+  .movie-info,
+  .tvshow-info {
+    font-size: 0.85rem;
+  }
+  
+  .movie-card-content,
+  .tvshow-card-content {
+    padding: var(--spacing-sm);
+  }
+  
+  .movie-rating,
+  .tvshow-rating {
+    bottom: var(--spacing-sm);
+    left: var(--spacing-sm);
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .movie-title,
+  .tvshow-title {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+  
+  .movie-info,
+  .tvshow-info {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  
+  .movie-card-content,
+  .tvshow-card-content {
+    padding: 8px;
+  }
+  
+  .movie-card-actions,
+  .tvshow-card-actions {
+    padding: 0 8px 8px;
+  }
+  
+  .movie-rating,
+  .tvshow-rating {
+    bottom: 6px;
+    left: 6px;
+    font-size: 0.8rem;
+  }
+  
+  .star, .rating-star {
+    font-size: 0.9em;
+  }
+  
+  /* Tablet ekranlarda görsel boyutunu %75'e düşür */
+  .movie-card-image,
+  .tvshow-card-image {
+    aspect-ratio: 2/3;
+    max-height: 75%;
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-title,
+  .tvshow-title {
+    font-size: 0.8rem;
+    margin-bottom: 2px;
+  }
+  
+  .movie-info,
+  .tvshow-info {
+    font-size: 0.7rem;
+    gap: 4px;
+  }
+  
+  .movie-card-content,
+  .tvshow-card-content {
+    padding: 6px;
+  }
+  
+  .movie-card-actions,
+  .tvshow-card-actions {
+    padding: 0 6px 6px;
+  }
+  
+  .add-to-list-buttons {
+    gap: 4px;
+  }
+  
+  .movie-rating,
+  .tvshow-rating {
+    bottom: 4px;
+    left: 4px;
+    font-size: 0.75rem;
+    gap: 3px;
+  }
+  
+  .star, .rating-star {
+    font-size: 0.8em;
+  }
+  
+  /* Mobil ekranlarda görsel boyutunu %50'ye düşür */
+  .movie-card-image,
+  .tvshow-card-image {
+    aspect-ratio: 2/3;
+    max-height: 50%;
+  }
+}
+
+@media (max-width: 320px) {
+  .movie-title,
+  .tvshow-title {
+    font-size: 0.7rem;
+    margin-bottom: 1px;
+  }
+  
+  .movie-info,
+  .tvshow-info {
+    font-size: 0.65rem;
+    gap: 3px;
+  }
+  
+  /* Çok küçük ekranlarda görsel boyutunu daha da küçült */
+  .movie-card-image,
+  .tvshow-card-image {
+    aspect-ratio: 2/3;
+    max-height: 40%;
+  }
 }

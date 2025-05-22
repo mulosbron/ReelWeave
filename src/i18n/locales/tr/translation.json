@@ -1,0 +1,267 @@
+{
+  "app": {
+    "name": "ReelWeave"
+  },
+  "header": {
+    "home": "Ana Sayfa",
+    "movies": "Filmler",
+    "tvShows": "Diziler",
+    "community": "Topluluk",
+    "myLists": "Listelerim",
+    "all": "Tümü"
+  },
+  "auth": {
+    "connect": "Cüzdan Bağla",
+    "disconnect": "Bağlantıyı Kes",
+    "walletConnected": "Cüzdan Bağlandı",
+    "connecting": "Bağlanıyor...",
+    "notDetected": "ArConnect Bulunamadı",
+    "notInstalledMessage": "ArConnect cüzdan eklentisi tarayıcınızda yüklü değil.",
+    "installPrompt": "Arweave cüzdanınızı bağlamak için lütfen ArConnect'i yükleyin.",
+    "install": "ArConnect Yükle",
+    "cancel": "İptal",
+    "connectWalletForAction": "Bu işlemi gerçekleştirmek için cüzdanınızı bağlamanız gerekiyor.",
+    "connectWalletFirst": "Lütfen önce cüzdanınızı bağlayın"
+  },
+  "gateway": {
+    "select": "Gateway Seç",
+    "current": "Mevcut Gateway",
+    "switchSuccess": "Gateway değiştirildi: {{from}} -> {{to}}",
+    "switchError": "Gateway değiştirilemedi"
+  },
+  "community": {
+    "title": "Topluluk",
+    "subtitle": "Film ve dizi tutkunlarının buluşma noktası",
+    "favorites": "Topluluk Favorileri",
+    "favoritesDescription": "En çok beğenilen ve favorilere eklenen içerikler",
+    "statistics": "İstatistikler",
+    "statisticsDescription": "ReelWeave topluluğu ve platformun güncel durumu",
+    "reviews": "Değerlendirmeler",
+    "reviewsDescription": "Topluluğumuzdan en son değerlendirmeler",
+    "movies": "Filmler",
+    "tvShows": "Diziler",
+    "users": "Kullanıcılar",
+    "activeUsers": "Aktif topluluk üyeleri",
+    "totalMovies": "Platformdaki toplam film sayısı",
+    "totalTvShows": "Platformdaki toplam dizi sayısı",
+    "noFavorites": "Henüz Favori Yok",
+    "noFavoritesDescription": "Henüz favorilere eklenen içerik yok. İlk favoriyi ekleyen siz olun!",
+    "browseMovies": "Filmlere Göz At",
+    "browseTvShows": "Dizilere Göz At",
+    "totalUsers": "Toplam Kullanıcı",
+    "totalUsersDescription": "Platformdaki toplam kullanıcı sayısı",
+    "activeReviewers": "Aktif Yorumcular",
+    "activeReviewersDescription": "Son 30 gün içinde yorum yapan kullanıcılar",
+    "totalReviews": "Toplam Yorum",
+    "totalReviewsDescription": "Platformdaki toplam yorum sayısı"
+  },
+  "home": {
+    "welcome": "ReelWeave'e Hoş Geldiniz",
+    "tagline": "Arweave ile desteklenen merkezi olmayan film ve dizi takip platformunuz",
+    "browseMovies": "FİLMLERE GÖZ AT",
+    "browseTvShows": "DİZİLERE GÖZ AT",
+    "whyReelWeave": "Neden ReelWeave?",
+    "features": {
+      "decentralized": {
+        "title": "Merkezi Olmayan Depolama",
+        "description": "İzleme listeleriniz ve tercihleriniz Arweave blok zincirinde kalıcı olarak saklanır"
+      },
+      "community": {
+        "title": "Topluluk Odaklı",
+        "description": "Değerlendirme ve önerilerinizi toplulukla paylaşın"
+      },
+      "tracking": {
+        "title": "Kişisel Takip",
+        "description": "İzlediğiniz ve izlemek istediğiniz içerikleri takip edin"
+      },
+      "recommendations": {
+        "title": "Akıllı Öneriler",
+        "description": "İzleme geçmişinize göre kişiselleştirilmiş öneriler alın"
+      }
+    },
+    "getStarted": "Başlayın",
+    "steps": [
+      "ArConnect cüzdanınızı bağlayın",
+      "Film ve dizilere göz atın",
+      "Kişisel izleme listelerinizi oluşturun",
+      "Değerlendirmelerinizi toplulukla paylaşın",
+      "Kişiselleştirilmiş öneriler alın"
+    ]
+  },
+  "search": {
+    "searchMovies": "Film ara...",
+    "searchTvShows": "Dizi ara...",
+    "filters": "Filtreler",
+    "year": "Yıl",
+    "allYears": "Tüm Yıllar",
+    "minimumRating": "Minimum Puan",
+    "anyRating": "Herhangi Bir Puan",
+    "ageRating": "Yaş Sınırı",
+    "allRatings": "Tüm Sınırlar",
+    "clearFilters": "Filtreleri Temizle"
+  },
+  "footer": {
+    "tagline": "Arweave ile desteklenen merkezi olmayan film ve dizi takip platformunuz",
+    "version": "Sürüm",
+    "quickLinks": "Hızlı Bağlantılar",
+    "resources": "Kaynaklar",
+    "connectWithUs": "Bize Ulaşın",
+    "builtWith": "Arweave üzerinde ❤️ ile yapıldı",
+    "features": "Merkezi Olmayan • Kalıcı • Topluluk Odaklı",
+    "allRightsReserved": "Tüm hakları saklıdır.",
+    "disclaimer": "Tüm film ve dizi verileri halka açık API'lardan alınmış ve Arweave blok zincirinde saklanmaktadır."
+  },
+  "recommendations": {
+    "title": "Size Özel Öneriler",
+    "connectWallet": "İzleme geçmişinize göre kişiselleştirilmiş film ve dizi önerileri almak için cüzdanınızı bağlayın.",
+    "loading": "Öneriler hazırlanıyor...",
+    "error": "Öneriler oluşturulurken hata oluştu",
+    "startWatching": "Kişiselleştirilmiş öneriler almak için film ve dizileri izlemeye ve puanlamaya başlayın!",
+    "scrollLeft": "Sola kaydır",
+    "scrollRight": "Sağa kaydır"
+  },
+  "movieDetail": {
+    "loading": "Film detayları yükleniyor...",
+    "notFound": "Film Bulunamadı",
+    "notFoundMessage": "İstenen film bulunamadı.",
+    "backToMovies": "Filmlere Dön",
+    "idNotFound": "Film ID'si bulunamadı, işlem yapılamıyor"
+  },
+  "tvShowDetail": {
+    "loading": "Dizi detayları yükleniyor...",
+    "notFound": "Dizi Bulunamadı",
+    "notFoundMessage": "İstenen dizi bulunamadı.",
+    "backToTvShows": "Dizilere Dön",
+    "idNotFound": "Dizi ID'si bulunamadı, işlem yapılamıyor"
+  },
+  "lists": {
+    "watchlist": "İzleme Listesi",
+    "watched": "İzlenenler",
+    "favorites": "Favoriler",
+    "addToWatchlist": "İzleme Listesine Ekle",
+    "addToWatched": "İzlendi Olarak İşaretle",
+    "addToFavorites": "Favorilere Ekle",
+    "inWatchlist": "İzleme Listesinde",
+    "inWatched": "İzlendi",
+    "inFavorites": "Favorilerde",
+    "removeFromList": "Listeden çıkar",
+    "manageLists": "Listeleri Yönet",
+    "removedFrom": "Listeden çıkarıldı",
+    "addedTo": "Listeye eklendi",
+    "removeFrom": "{{list}} listesinden çıkar",
+    "addTo": "{{list}} listesine ekle",
+    "in": "Listede",
+    "updateError": "Liste güncelleme hatası"
+  },
+  "pages": {
+    "movies": {
+      "title": "Filmler",
+      "subtitle": "Film koleksiyonumuzu keşfedin",
+      "loadingMessage": "Filmler yükleniyor...",
+      "noMoviesFound": "Mevcut filtrelerle film bulunamadı.",
+      "error": "Filmler yüklenirken hata oluştu:"
+    },
+    "tvShows": {
+      "title": "Diziler",
+      "subtitle": "Dizi koleksiyonumuzu keşfedin",
+      "loadingMessage": "Diziler yükleniyor...",
+      "noShowsFound": "Mevcut filtrelerle dizi bulunamadı.",
+      "error": "Diziler yüklenirken hata oluştu:"
+    },
+    "myLists": {
+      "title": "Listelerim",
+      "subtitle": "Kişisel film ve dizi listelerinizi yönetin",
+      "watchlist": "İzleme Listesi",
+      "favorites": "Favoriler",
+      "watched": "İzlenenler",
+      "createList": "Yeni Liste Oluştur",
+      "noListsFound": "Henüz hiç listeniz yok.",
+      "connectWalletPrompt": "Listelerinizi görüntülemek için ArConnect cüzdanınızı bağlamanız gerekiyor.",
+      "connectWalletTitle": "Cüzdanınızı Bağlayın",
+      "loading": "Listeleriniz yükleniyor...",
+      "lastUpdated": "Son Güncelleme",
+      "refreshTooltip": "Listelerinizi yenileyin",
+      "refreshing": "Yenileniyor...",
+      "refreshLists": "Listeleri Yenile",
+      "error": "Listeler yüklenirken hata oluştu"
+    },
+    "notFound": {
+      "title": "Sayfa Bulunamadı",
+      "description": "Aradığınız sayfa mevcut değil.",
+      "backToHome": "Ana Sayfaya Dön"
+    }
+  },
+  "reviews": {
+    "communityReviews": "Topluluk Değerlendirmeleri",
+    "userReviews": "Kullanıcı Değerlendirmeleri",
+    "loading": "Değerlendirmeler yükleniyor...",
+    "error": "Değerlendirmeler yüklenirken hata oluştu",
+    "noReviews": "Henüz değerlendirme yok. İlk değerlendirmeyi yapan siz olun!",
+    "noRatingsYet": "Henüz puanlama yok",
+    "writeReview": "Değerlendirme Yap",
+    "yourReview": "Değerlendirmeniz",
+    "rating": "Puanınız:",
+    "comment": "Yorumunuz:",
+    "placeholder": "Bu içerik hakkında düşüncelerinizi paylaşın...",
+    "submit": "Değerlendirme Gönder",
+    "update": "Değerlendirmeyi Güncelle",
+    "cancel": "İptal",
+    "edited": "düzenlendi",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "daysAgo": "{{count}} gün önce",
+    "weeksAgo": "{{count}} hafta önce",
+    "anonymous": "Anonim",
+    "you": "Siz",
+    "loginToReview": "Değerlendirme yapmak için cüzdanınızı bağlamanız gerekiyor.",
+    "users": "kullanıcı",
+    "invalidDate": "geçersiz tarih",
+    "recently": "Yakın zamanda"
+  },
+  "comments": {
+    "sending": "Gönderiliyor...",
+    "error": {
+      "empty": "Yorum boş olamaz",
+      "noRating": "Lütfen bir puan verin (1-5 yıldız)",
+      "notConnected": "Lütfen önce cüzdanınızı bağlayın",
+      "missingItemInfo": "Öğe kimliği ve türü olmadan yorum eklenemez",
+      "submitFailed": "Yorum gönderilemedi",
+      "submitError": "Yorum gönderilirken hata oluştu",
+      "transactionError": "İşlem hatası: {{status}}"
+    },
+    "successMessage": "Yorumunuz başarıyla gönderildi. Arweave ağında onaylanması birkaç dakika sürebilir.",
+    "commentPlaceholder": "Yorumunuzu yazın...",
+    "replyPlaceholder": "Yanıtınızı yazın...",
+    "reply": "Yanıtla",
+    "comment": "Yorum Yap"
+  },
+  "content": {
+    "unknown": "Bilinmeyen İçerik",
+    "unknownMovie": "Bilinmeyen Film",
+    "movie": "Film",
+    "tvShow": "Dizi",
+    "year": "Yıl",
+    "usersFavorited": "kullanıcı favoriledi",
+    "about": "Hakkında",
+    "information": "Bilgiler",
+    "episodes": "Bölümler",
+    "ageRating": "Yaş Sınırı",
+    "imdbRating": "IMDB Puanı",
+    "director": "Yönetmen",
+    "creator": "Yaratıcı",
+    "cast": "Oyuncular",
+    "genre": "Tür",
+    "duration": "Süre",
+    "notAvailable": "Mevcut değil",
+    "season": "Sezon",
+    "seasons": "Sezon",
+    "movieDefaultDescription": "Nesiller boyu izleyicileri büyüleyen klasik bir film.",
+    "tvShowDefaultDescription": "Dünya çapında izleyicileri kendine hayran bırakan ödüllü bir dizi."
+  },
+  "language": {
+    "title": "Dil",
+    "english": "English",
+    "turkish": "Türkçe"
+  },
+  "tryAgain": "Tekrar Dene"
+} 

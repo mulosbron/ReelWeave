@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const TvShowCard = ({ tvshow, onAddToList, isInList }) => {
+  const { t } = useTranslation();
   const { hash, title, year, rating, seasons, ageRating, imagePath } = tvshow;
 
   return (
@@ -27,7 +29,7 @@ const TvShowCard = ({ tvshow, onAddToList, isInList }) => {
           <h3 className="tvshow-title">{title}</h3>
           <div className="tvshow-info">
             <span className="tvshow-year">{year}</span>
-            <span className="tvshow-seasons">{seasons} Season{seasons !== 1 ? 's' : ''}</span>
+            <span className="tvshow-seasons">{seasons} {seasons !== 1 ? t('content.seasons') : t('content.season')}</span>
             {ageRating && <span className="tvshow-age-rating">{ageRating}</span>}
           </div>
         </div>

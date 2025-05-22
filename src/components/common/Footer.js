@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { APP_NAME, APP_VERSION } from '../../utils/constants';
 
 const Footer = () => {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -11,22 +13,22 @@ const Footer = () => {
         <div className="footer-content">
           <div className="footer-section">
             <h3>{APP_NAME}</h3>
-            <p>Your decentralized movie and TV show tracking platform</p>
-            <p className="footer-version">Version {APP_VERSION}</p>
+            <p>{t('footer.tagline')}</p>
+            <p className="footer-version">{t('footer.version')} {APP_VERSION}</p>
           </div>
           
           <div className="footer-section">
-            <h3>Quick Links</h3>
+            <h3>{t('footer.quickLinks')}</h3>
             <ul className="footer-links">
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/movies">Movies</Link></li>
-              <li><Link to="/tvshows">TV Shows</Link></li>
-              <li><Link to="/community">Community</Link></li>
+              <li><Link to="/">{t('header.home')}</Link></li>
+              <li><Link to="/movies">{t('header.movies')}</Link></li>
+              <li><Link to="/tvshows">{t('header.tvShows')}</Link></li>
+              <li><Link to="/community">{t('header.community')}</Link></li>
             </ul>
           </div>
           
           <div className="footer-section">
-            <h3>Resources</h3>
+            <h3>{t('footer.resources')}</h3>
             <ul className="footer-links">
               <li>
                 <a 
@@ -59,16 +61,16 @@ const Footer = () => {
           </div>
           
           <div className="footer-section">
-            <h3>Connect With Us</h3>
-            <p>Built with ❤️ on Arweave</p>
-            <p>Decentralized • Permanent • Community-Driven</p>
+            <h3>{t('footer.connectWithUs')}</h3>
+            <p>{t('footer.builtWith')}</p>
+            <p>{t('footer.features')}</p>
           </div>
         </div>
         
         <div className="footer-bottom">
-          <p>&copy; {currentYear} {APP_NAME}. All rights reserved.</p>
+          <p>&copy; {currentYear} {APP_NAME}. {t('footer.allRightsReserved')}</p>
           <p className="footer-disclaimer">
-            All movie and TV show data is sourced from public APIs and stored on Arweave blockchain.
+            {t('footer.disclaimer')}
           </p>
         </div>
       </div>

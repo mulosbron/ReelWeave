@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import TvShowDetails from '../components/tvshows/TvShowDetails';
 import Loading from '../components/common/Loading';
 import { tvShowsService } from '../services/api/tvshows';
 
 const TvShowDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [tvShow, setTvShow] = useState(null);
@@ -30,19 +32,19 @@ const TvShowDetailPage = () => {
   }, [id]);
 
   if (loading) {
-    return <Loading message="Loading TV show details..." fullScreen />;
+    return <Loading message={t('tvShowDetail.loading')} fullScreen />;
   }
 
   if (error || !tvShow) {
     return (
       <div className="error-page">
-        <h2>TV Show Not Found</h2>
-        <p>{error || 'The requested TV show could not be found.'}</p>
+        <h2>{t('tvShowDetail.notFound')}</h2>
+        <p>{error || t('tvShowDetail.notFoundMessage')}</p>
         <button 
           onClick={() => navigate('/tvshows')} 
           className="btn btn-primary"
         >
-          Back to TV Shows
+          {t('tvShowDetail.backToTvShows')}
         </button>
       </div>
     );

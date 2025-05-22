@@ -18,18 +18,13 @@ const RecommendationCard = ({ item, contentType, score, hideMatchScore, badgeTex
               e.target.src = `/placeholder-${contentType}.png`;
             }}
           />
-          <div className="recommendation-overlay">
-            {!hideMatchScore && score && (
-              <div className="match-score">
-                {Math.round(score * 100)}% Match
-              </div>
-            )}
-            {badgeText && (
+          {badgeText && (
+            <div className="recommendation-overlay">
               <div className="badge-text">
                 {badgeText}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         
         <div className="recommendation-content">
@@ -41,12 +36,6 @@ const RecommendationCard = ({ item, contentType, score, hideMatchScore, badgeTex
                 <span className="separator">•</span>
                 <span className="rating">★ {item.rating}</span>
               </>
-            )}
-            {isMovie && item.duration && (
-              <span className="duration"> • {item.duration}</span>
-            )}
-            {!isMovie && item.seasons && (
-              <span className="seasons"> • {item.seasons} Sezon</span>
             )}
           </div>
         </div>

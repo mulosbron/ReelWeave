@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import MovieList from '../components/movies/MovieList';
 import MovieSearch from '../components/movies/MovieSearch';
 import useMovies from '../hooks/useMovies';
 import { filterBySearchTerm, filterMovies } from '../utils/helpers';
 
 const MoviesPage = () => {
+  const { t } = useTranslation();
   const { movies, loading, error, fetchMovies } = useMovies();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
@@ -43,8 +45,8 @@ const MoviesPage = () => {
   return (
     <div className="movies-page">
       <div className="page-header">
-        <h1>Movies</h1>
-        <p>Browse our collection of top-rated movies</p>
+        <h1>{t('pages.movies.title')}</h1>
+        <p>{t('pages.movies.subtitle')}</p>
       </div>
       
       <MovieSearch onSearch={handleSearch} onFilter={handleFilter} />
@@ -54,8 +56,8 @@ const MoviesPage = () => {
         loading={loading}
         error={error}
         emptyMessage={searchTerm || Object.values(filters).some(v => v) ? 
-          "No movies match your search criteria" : 
-          "No movies available"}
+          t('pages.movies.noMoviesFound') : 
+          t('pages.movies.noMoviesFound')}
       />
     </div>
   );

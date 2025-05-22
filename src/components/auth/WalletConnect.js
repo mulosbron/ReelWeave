@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import useAuth from '../../hooks/useAuth';
 
 const WalletConnect = () => {
+  const { t } = useTranslation();
   const { 
     isConnected, 
     walletAddress, 
@@ -32,7 +34,7 @@ const WalletConnect = () => {
     return (
       <div className="wallet-connect">
         <button className="btn btn-loading" disabled>
-          Connecting...
+          {t('auth.connecting')}
         </button>
       </div>
     );
@@ -47,7 +49,7 @@ const WalletConnect = () => {
             onClick={disconnect} 
             className="btn btn-disconnect"
           >
-            Disconnect
+            {t('auth.disconnect')}
           </button>
         </div>
       </div>
@@ -60,7 +62,7 @@ const WalletConnect = () => {
         onClick={handleConnect} 
         className="btn btn-connect"
       >
-        Connect Wallet
+        {t('auth.connect')}
       </button>
       
       {error && (
@@ -73,7 +75,7 @@ const WalletConnect = () => {
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>ArConnect Not Detected</h3>
+              <h3>{t('auth.notDetected')}</h3>
               <button 
                 className="modal-close" 
                 onClick={() => setShowModal(false)}
@@ -82,8 +84,8 @@ const WalletConnect = () => {
               </button>
             </div>
             <div className="modal-body">
-              <p>ArConnect wallet extension is not installed in your browser.</p>
-              <p>Please install ArConnect to connect your Arweave wallet.</p>
+              <p>{t('auth.notInstalledMessage')}</p>
+              <p>{t('auth.installPrompt')}</p>
               <div className="modal-actions">
                 <a 
                   href="https://www.arconnect.io/download" 
@@ -91,13 +93,13 @@ const WalletConnect = () => {
                   rel="noopener noreferrer"
                   className="btn btn-primary"
                 >
-                  Install ArConnect
+                  {t('auth.install')}
                 </a>
                 <button 
                   onClick={() => setShowModal(false)}
                   className="btn btn-secondary"
                 >
-                  Cancel
+                  {t('auth.cancel')}
                 </button>
               </div>
             </div>

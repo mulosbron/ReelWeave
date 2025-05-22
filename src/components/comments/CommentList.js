@@ -1,5 +1,5 @@
-// components/comments/CommentList.js
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import useComments from '../../hooks/useComments';
 import Loading from '../common/Loading';
 import CommentItem from './CommentItem';
@@ -7,12 +7,14 @@ import DirectCommentForm from './DirectCommentForm';
 import useAuth from '../../hooks/useAuth';
 
 const CommentList = ({ itemId, itemType }) => {
+  const { t } = useTranslation();
   const { 
     comments, 
     loading, 
     error, 
     fetchComments, 
-    userComment
+    userComment,
+    isEditing
   } = useComments(itemId, itemType);
   
   const { walletAddress } = useAuth();
@@ -38,6 +40,7 @@ const CommentList = ({ itemId, itemType }) => {
     comments: comments?.length || 0,
     itemId,
     itemType,
+    isEditing,
     walletAddress
   });
   
@@ -48,7 +51,7 @@ const CommentList = ({ itemId, itemType }) => {
 
   return (
     <div className="community-section">
-      <h2>Community Reviews</h2>
+      <h2>{t('reviews.communityReviews')}</h2>
 
       {/* DirectCommentForm'a tüm gerekli props'ları geçiyoruz */}
       <DirectCommentForm
@@ -58,18 +61,18 @@ const CommentList = ({ itemId, itemType }) => {
       />
 
       <div className="comments-container">
-        <h3>User Reviews ({filteredComments.length})</h3>
+        <h3>{t('reviews.userReviews')} ({filteredComments.length})</h3>
 
         {loading ? (
-          <Loading message="Loading reviews..." />
+          <Loading message={t('reviews.loading')} />
         ) : error ? (
           <div className="error-message">
-            <p>Error loading reviews: {error}</p>
+            <p>{t('reviews.error')}: {error}</p>
           </div>
         ) : filteredComments && filteredComments.length > 0 ? (
           <div className="comments-list">
             {filteredComments.map(comment => {
-              console.log(`Comment: ${comment.author} vs User: ${walletAddress}`);
+              console.log(`Yorum: ${comment.author} vs Kullanıcı: ${walletAddress}`);
               const isUserOwnComment = walletAddress && comment.author && 
                 comment.author.toLowerCase() === walletAddress.toLowerCase();
               return (
@@ -82,7 +85,7 @@ const CommentList = ({ itemId, itemType }) => {
             })}
           </div>
         ) : (
-          <p className="no-comments">No reviews yet. Be the first to review!</p>
+          <p className="no-comments">{t('reviews.noReviews')}</p>
         )}
       </div>
     </div>

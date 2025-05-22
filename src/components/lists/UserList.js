@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import useLists from '../../hooks/useLists';
 import Loading from '../common/Loading';
 import { CONTENT_TYPES } from '../../utils/constants';
 
 const UserList = ({ listType, title }) => {
+  const { t } = useTranslation();
   const { getListByType, removeFromList, loading } = useLists();
   const [removingItems, setRemovingItems] = useState({});
   const items = getListByType(listType);
@@ -37,7 +39,7 @@ const UserList = ({ listType, title }) => {
       return `https://${imagePath}`;
     }
     
-    // For other cases, add arweave.net prefix
+    // Orijinal arweave URL'i
     return `https://arweave.net/${imagePath}`;
   };
 
@@ -64,19 +66,19 @@ const UserList = ({ listType, title }) => {
   const validItems = items.filter(hasRequiredDetails);
 
   if (loading && items.length === 0) {
-    return <Loading message={`Loading ${title}...`} />;
+    return <Loading message={t('pages.myLists.loading')} />;
   }
 
   if (!items || items.length === 0) {
     return (
       <div className="empty-list">
-        <p>Your {title} list is empty</p>
+        <p>{t('pages.myLists.noListsFound')}</p>
         <div className="empty-actions">
         <Link to="/movies" className="btn btn-primary">
-            Browse Movies
+            {t('community.browseMovies')}
           </Link>
           <Link to="/tvshows" className="btn btn-primary">
-            Browse TV Shows
+            {t('community.browseTvShows')}
         </Link>
         </div>
       </div>
@@ -98,7 +100,7 @@ const UserList = ({ listType, title }) => {
                     ? getFullImageUrl(item.itemDetails.poster)
                     : `/placeholder-${item.itemType || 'content'}.png`
                   }
-                  alt={item.itemDetails?.title || 'Content'}
+                  alt={item.itemDetails?.title || t('content.unknown')}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = `/placeholder-${item.itemType || 'content'}.png`;
@@ -106,7 +108,7 @@ const UserList = ({ listType, title }) => {
                 />
                 {item.itemType && (
                   <div className="content-type-badge">
-                    {item.itemType === CONTENT_TYPES.MOVIE ? 'Movie' : 'TV Show'}
+                    {item.itemType === CONTENT_TYPES.MOVIE ? t('content.movie') : t('content.tvShow')}
                   </div>
                 )}
               </div>
@@ -117,14 +119,14 @@ const UserList = ({ listType, title }) => {
                   <p className="item-rating">⭐ {item.itemDetails.rating}</p>
                 )}
                 <p className="added-date">
-                  Added: {item.addedAt ? new Date(item.addedAt).toLocaleDateString('en-US') : '?'}
+                  {t('pages.myLists.lastUpdated')}: {item.addedAt ? new Date(item.addedAt).toLocaleDateString() : '?'}
                 </p>
               </div>
             </Link>
             <button
               className="btn-remove"
               onClick={() => handleRemove(item.itemId)}
-              title="Remove from list"
+              title={t('lists.removeFromList')}
               disabled={removingItems[item.itemId]}
             >
               {removingItems[item.itemId] ? '...' : '×'}

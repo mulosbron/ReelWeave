@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/useAuth';
 import useLists from '../hooks/useLists';
 import UserList from '../components/lists/UserList';
@@ -7,6 +8,7 @@ import Loading from '../components/common/Loading';
 import { LIST_TYPES } from '../utils/constants';
 
 const MyListsPage = () => {
+  const { t } = useTranslation();
   const { isConnected, isLoading: authLoading } = useAuth();
   const { 
     lists, 
@@ -64,19 +66,19 @@ const MyListsPage = () => {
   const counts = getCounts();
 
   if (authLoading || (listsLoading && !initialized)) {
-    return <Loading message="Loading your lists..." fullScreen />;
+    return <Loading message={t('pages.myLists.loading')} fullScreen />;
   }
 
   if (!isConnected) {
     return (
       <div className="not-connected">
-        <h2>Connect Your Wallet</h2>
-        <p>You need to connect your ArConnect wallet to view your lists.</p>
+        <h2>{t('pages.myLists.connectWalletTitle')}</h2>
+        <p>{t('pages.myLists.connectWalletPrompt')}</p>
         <button 
           onClick={() => navigate('/')} 
           className="btn btn-primary"
         >
-          Return to Home
+          {t('pages.notFound.backToHome')}
         </button>
       </div>
     );
@@ -85,25 +87,25 @@ const MyListsPage = () => {
   return (
     <div className="my-lists-page">
       <div className="page-header">
-        <h1>My Lists</h1>
-        <p>Manage your movie and TV show collections</p>
+        <h1>{t('pages.myLists.title')}</h1>
+        <p>{t('pages.myLists.subtitle')}</p>
         
         <div className="content-type-badges">
-          <div className="content-type-badge">Movie</div>
-          <div className="content-type-badge">TV Show</div>
+          <div className="content-type-badge">{t('content.movie')}</div>
+          <div className="content-type-badge">{t('content.tvShow')}</div>
         </div>
 
         <div className="list-stats">
           <div className="stat-item highlight">
-            <span className="stat-label">Watchlist</span>
+            <span className="stat-label">{t('pages.myLists.watchlist')}</span>
             <span className="stat-value">{counts.watchlist}</span>
           </div>
           <div className="stat-item highlight">
-            <span className="stat-label">Watched</span>
+            <span className="stat-label">{t('pages.myLists.watched')}</span>
             <span className="stat-value">{counts.watched}</span>
           </div>
           <div className="stat-item highlight">
-            <span className="stat-label">Favorites</span>
+            <span className="stat-label">{t('pages.myLists.favorites')}</span>
             <span className="stat-value">{counts.favorites}</span>
           </div>
         </div>
@@ -111,7 +113,7 @@ const MyListsPage = () => {
         <div className="refresh-section">
           {lastUpdated && (
             <div className="last-updated">
-              Last Updated: {new Date(lastUpdated).toLocaleString('en-US')}
+              {t('pages.myLists.lastUpdated')}: {new Date(lastUpdated).toLocaleString()}
             </div>
           )}
           
@@ -119,20 +121,20 @@ const MyListsPage = () => {
             onClick={handleRefresh} 
             className="btn-manual-refresh" 
             disabled={refreshing}
-            title="Refresh your lists"
+            title={t('pages.myLists.refreshTooltip')}
           >
-            {refreshing ? 'Refreshing...' : 'Refresh Lists'}
+            {refreshing ? t('pages.myLists.refreshing') : t('pages.myLists.refreshLists')}
           </button>
         </div>
         
         {error && (
           <div className="error-message">
-            <p>Error loading lists: {error}</p>
+            <p>{t('pages.myLists.error')}: {error}</p>
             <button 
               onClick={handleRefresh}
               className="btn btn-primary"
             >
-              Try Again
+              {t('tryAgain')}
             </button>
           </div>
         )}
@@ -141,34 +143,34 @@ const MyListsPage = () => {
       <div className="lists-container">
         <section className="list-section">
           <h2>
-            <span className="list-icon">📋</span> My Watchlist
+            <span className="list-icon">📋</span> {t('pages.myLists.watchlist')}
             <span className="item-count">{counts.watchlist}</span>
           </h2>
           <UserList 
             listType={LIST_TYPES.WATCHLIST} 
-            title="My Watchlist" 
+            title={t('pages.myLists.watchlist')} 
           />
         </section>
 
         <section className="list-section">
           <h2>
-            <span className="list-icon">✓</span> Watched
+            <span className="list-icon">✓</span> {t('pages.myLists.watched')}
             <span className="item-count">{counts.watched}</span>
           </h2>
           <UserList 
             listType={LIST_TYPES.WATCHED} 
-            title="Watched" 
+            title={t('pages.myLists.watched')} 
           />
         </section>
 
         <section className="list-section">
           <h2>
-            <span className="list-icon">❤️</span> My Favorites
+            <span className="list-icon">❤️</span> {t('pages.myLists.favorites')}
             <span className="item-count">{counts.favorites}</span>
           </h2>
           <UserList 
             listType={LIST_TYPES.FAVORITES} 
-            title="My Favorites" 
+            title={t('pages.myLists.favorites')} 
           />
         </section>
       </div>

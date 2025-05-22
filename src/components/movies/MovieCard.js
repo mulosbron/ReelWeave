@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const MovieCard = ({ movie, onAddToList, isInList }) => {
+  const { t } = useTranslation();
   const { hash, title, year, rating, duration, ageRating, imagePath } = movie;
 
   return (

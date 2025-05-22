@@ -18,11 +18,6 @@ const HomeRecommendationCard = ({ item, contentType, score }) => {
               e.target.src = `/placeholder-${contentType}.png`;
             }}
           />
-          <div className="recommendation-overlay">
-            <div className="match-score">
-              {Math.round(score * 100)}% Match
-            </div>
-          </div>
         </div>
         
         <div className="recommendation-content">
@@ -34,9 +29,6 @@ const HomeRecommendationCard = ({ item, contentType, score }) => {
                 <span className="separator">•</span>
                 <span className="rating">★ {item.rating}</span>
               </>
-            )}
-            {isMovie && item.duration && (
-              <span className="duration"> • {item.duration}</span>
             )}
           </div>
         </div>

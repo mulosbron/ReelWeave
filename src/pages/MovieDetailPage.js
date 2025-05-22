@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import MovieDetails from '../components/movies/MovieDetails';
 import Loading from '../components/common/Loading';
 import { moviesService } from '../services/api/movies';
 
 const MovieDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
@@ -30,19 +32,19 @@ const MovieDetailPage = () => {
   }, [id]);
 
   if (loading) {
-    return <Loading message="Loading movie details..." fullScreen />;
+    return <Loading message={t('movieDetail.loading')} fullScreen />;
   }
 
   if (error || !movie) {
     return (
       <div className="error-page">
-        <h2>Movie Not Found</h2>
-        <p>{error || 'The requested movie could not be found.'}</p>
+        <h2>{t('movieDetail.notFound')}</h2>
+        <p>{error || t('movieDetail.notFoundMessage')}</p>
         <button 
           onClick={() => navigate('/movies')} 
           className="btn btn-primary"
         >
-          Back to Movies
+          {t('movieDetail.backToMovies')}
         </button>
       </div>
     );

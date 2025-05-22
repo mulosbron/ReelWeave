@@ -117,3 +117,90 @@
   justify-content: center;
   font-weight: bold;
 }
+
+/* Home Carousel Styles */
+.home-carousel {
+  margin-bottom: var(--spacing-2xl);
+  position: relative;
+}
+
+.carousel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.carousel-title h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.carousel-controls {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.carousel-controls button {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.carousel-controls button:hover {
+  background-color: var(--background-tertiary);
+}
+
+/* Film/Dizi kartları için mobil responsive değerler _responsive.css ve _cards.css dosyalarında tanımlanmıştır */
+
+/* Responsive Home Styles */
+@media (max-width: 768px) {
+  .carousel-title h2 {
+    font-size: 1.3rem;
+  }
+  
+  .carousel-controls button {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .carousel-content .movie-card,
+  .carousel-content .tvshow-card {
+    width: 140px; /* Tablet için küçültülmüş genişlik */
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-title h2 {
+    font-size: 1.1rem;
+  }
+  
+  .carousel-controls button {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .carousel-content .movie-card,
+  .carousel-content .tvshow-card {
+    width: 110px; /* Mobil için küçültülmüş genişlik */
+  }
+}
+
+@media (max-width: 320px) {
+  .carousel-title h2 {
+    font-size: 1rem;
+  }
+  
+  .carousel-content .movie-card,
+  .carousel-content .tvshow-card {
+    width: 90px; /* Çok küçük ekranlar için küçültülmüş genişlik */
+  }
+}

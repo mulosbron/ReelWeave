@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import HomeRecommendationCard from './HomeRecommendationCard';
 import Loading from '../common/Loading';
 import useAuth from '../../hooks/useAuth';
@@ -9,6 +10,7 @@ import { generateRecommendations } from '../../utils/recommendations';
 import { CONTENT_TYPES, LIST_TYPES } from '../../utils/constants';
 
 const RecommendationList = ({ contentType = null, limit = 100 }) => {
+  const { t } = useTranslation();
   const { isConnected } = useAuth();
   const { getAllLists } = useLists();
   const { movies } = useMovies();
@@ -71,14 +73,14 @@ const RecommendationList = ({ contentType = null, limit = 100 }) => {
         setRecommendations(recommendedItems);
       } catch (err) {
         console.error('Error generating recommendations:', err);
-        setError('Failed to generate recommendations');
+        setError(t('recommendations.error'));
       } finally {
         setLoading(false);
       }
     };
 
     getRecommendations();
-  }, [isConnected, contentType, limit, getAllLists, movies, tvShows]);
+  }, [isConnected, contentType, limit, getAllLists, movies, tvShows, t]);
 
   const handleScroll = (direction) => {
     const container = scrollContainerRef.current;
@@ -91,14 +93,14 @@ const RecommendationList = ({ contentType = null, limit = 100 }) => {
   if (!isConnected) {
     return (
       <div className="recommendations-auth">
-        <h2>Recommended for You</h2>
-        <p>Connect your wallet to get personalized movie and TV show recommendations based on your viewing history.</p>
+        <h2>{t('recommendations.title')}</h2>
+        <p>{t('recommendations.connectWallet')}</p>
       </div>
     );
   }
 
   if (loading) {
-    return <Loading message="Generating recommendations..." />;
+    return <Loading message={t('recommendations.loading')} />;
   }
 
   if (error) {
@@ -112,20 +114,20 @@ const RecommendationList = ({ contentType = null, limit = 100 }) => {
   if (recommendations.length === 0) {
     return (
       <div className="recommendations-empty">
-        <h2>Recommended for You</h2>
-        <p>Start watching and rating movies or TV shows to get personalized recommendations!</p>
+        <h2>{t('recommendations.title')}</h2>
+        <p>{t('recommendations.startWatching')}</p>
       </div>
     );
   }
 
   return (
     <div className="recommendation-list">
-      <h2>Recommended for You</h2>
+      <h2>{t('recommendations.title')}</h2>
       
       <button
         className="recommendation-scroll-btn recommendation-scroll-left"
         onClick={() => handleScroll('left')}
-        aria-label="Scroll left"
+        aria-label={t('recommendations.scrollLeft')}
       />
       
       <div className="recommendations-grid" ref={scrollContainerRef}>
@@ -142,7 +144,7 @@ const RecommendationList = ({ contentType = null, limit = 100 }) => {
       <button
         className="recommendation-scroll-btn recommendation-scroll-right"
         onClick={() => handleScroll('right')}
-        aria-label="Scroll right"
+        aria-label={t('recommendations.scrollRight')}
       />
     </div>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import MovieCard from './MovieCard';
 import Loading from '../common/Loading';
 
@@ -8,18 +9,20 @@ const MovieList = ({
   error, 
   onAddToList, 
   userLists = [],
-  emptyMessage = "No movies found" 
+  emptyMessage = null
 }) => {
+  const { t } = useTranslation();
+  
   if (loading) {
-    return <Loading message="Loading movies..." />;
+    return <Loading message={t('pages.movies.loadingMessage')} />;
   }
 
   if (error) {
     return (
       <div className="error-message">
-        <p>Error loading movies: {error}</p>
+        <p>{t('pages.movies.error')} {error}</p>
         <button onClick={() => window.location.reload()} className="btn btn-retry">
-          Retry
+          {t('tryAgain')}
         </button>
       </div>
     );
@@ -28,7 +31,7 @@ const MovieList = ({
   if (!movies || movies.length === 0) {
     return (
       <div className="empty-message">
-        <p>{emptyMessage}</p>
+        <p>{emptyMessage || t('pages.movies.noMoviesFound')}</p>
       </div>
     );
   }

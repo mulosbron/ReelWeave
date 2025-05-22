@@ -10,6 +10,7 @@
 @import './components/_buttons.css';
 @import './components/_cards.css';
 @import './components/_comments.css';
+@import './components/_community-reviews.css';
 @import './components/_filters.css';
 @import './components/_footer.css';
 @import './components/_header.css';
@@ -17,6 +18,7 @@
 @import './components/_navigation.css';
 @import './components/_recommendations.css';
 @import './components/_gateway-selector.css';
+@import './components/_language-selector.css';
 
 @import './layout/_containers.css';
 @import './layout/_grid.css';

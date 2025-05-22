@@ -607,6 +607,67 @@ class CommentsService {
       return [];
     }
   }
+
+  // Tüm yorumları getir
+  async getAllComments() {
+    try {
+      console.log('Tüm yorumlar getiriliyor...');
+      
+      // Daha geniş bir sorgu yapalım - sadece Content-Type tagini dahil edelim
+      const queryString = `
+        query {
+          transactions(
+            tags: [
+              { name: "App-Name", values: ["${APP_NAME}"] },
+              { name: "Content-Type", values: ["application/json"] }
+            ]
+            sort: HEIGHT_DESC
+            first: 200
+          ) {
+            edges {
+              node {
+                id
+                tags {
+                  name
+                  value
+                }
+                block {
+                  timestamp
+                  height
+                }
+              }
+            }
+          }
+        }
+      `;
+
+      const result = await graphql.query(queryString);
+      console.log("GraphQL result for all comments:", result);
+      
+      if (!result?.transactions?.edges) {
+        console.log("No transactions found");
+        return [];
+      }
+      
+      // Tüm işlemleri al ve sonradan filtrele
+      const allTransactions = result.transactions.edges;
+      console.log(`Found ${allTransactions.length} total transactions`);
+      
+      // İşlemleri işle
+      const processedComments = await this.processCommentsWithUpdates(allTransactions);
+      
+      // Sadece yorum işlemlerini filtrele
+      const commentActions = processedComments.filter(comment => 
+        comment.content && comment.author && comment.itemId && comment.itemType
+      );
+      
+      console.log(`Found ${commentActions.length} comment actions`);
+      return commentActions;
+    } catch (error) {
+      console.error('Error fetching all comments:', error);
+      return [];
+    }
+  }
 }
 
 export const commentsService = new CommentsService();

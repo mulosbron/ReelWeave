@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { WalletContext } from '../../contexts/WalletContext';
 import { UserContext } from '../../contexts/UserContext';
 import { NotificationContext } from '../../contexts/NotificationContext';
@@ -8,6 +9,7 @@ import { APP_NAME, APP_VERSION, TX_TAGS, ACTIONS } from '../../utils/constants';
 import Loading from '../common/Loading';
 
 const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel }) => {
+  const { t } = useTranslation();
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { wallet, isConnected } = useContext(WalletContext);
@@ -22,19 +24,19 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
     e.preventDefault();
     
     if (!comment.trim()) {
-      showNotification('error', 'Comment cannot be empty');
+      showNotification('error', t('comments.error.empty'));
       return;
     }
     
     if (!isConnected || !wallet) {
-      showNotification('error', 'You need to connect your wallet to comment');
+      showNotification('error', t('comments.error.notConnected'));
       return;
     }
     
     setIsSubmitting(true);
     
     try {
-      // Prepare comment data
+      // Yorum verilerini hazırla
       const commentData = {
         video: videoId,
         parent: parentId,
@@ -43,20 +45,20 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
         version: APP_VERSION
       };
       
-      // Send comment to Arweave
+      // Yorumu Arweave'e gönder
       await submitComment(commentData);
       
-      // Clear form and show success notification
+      // Formu temizle ve başarılı bildirimi göster
       setComment('');
-      showNotification('success', 'Your comment has been submitted successfully. It may take a few minutes to be confirmed on the Arweave network.');
+      showNotification('success', t('comments.successMessage'));
       
-      // Call callback function
+      // Callback fonksiyonunu çağır
       if (typeof onCommentSubmitted === 'function') {
         onCommentSubmitted();
       }
     } catch (error) {
-      console.error('Error submitting comment:', error);
-      showNotification('error', `Error submitting comment: ${error.message}`);
+      console.error('Yorum gönderilirken hata oluştu:', error);
+      showNotification('error', `${t('comments.error.submitError')}: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -98,7 +100,7 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
           // Gateway değiştir
           await handleGatewaySwitch();
           
-          throw new Error(`İşlem gönderme hatası: ${result.statusText}`);
+          throw new Error(t('comments.error.transactionError', { status: result.statusText }));
         }
         
         console.log('Yorum işlemi gönderildi:', tx.id);
@@ -124,10 +126,10 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
       const switchResult = await switchToNextGateway();
       
       if (switchResult.success) {
-        showNotification('info', `Gateway değiştirildi: ${currentGateway} -> ${switchResult.gateway}`);
+        showNotification('info', t('gateway.switchSuccess', { from: currentGateway, to: switchResult.gateway }));
         return true;
       } else {
-        showNotification('error', 'Gateway değiştirilemedi');
+        showNotification('error', t('gateway.switchError'));
         return false;
       }
     } catch (error) {
@@ -142,7 +144,7 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
         <textarea
           value={comment}
           onChange={handleCommentChange}
-          placeholder={parentId ? "Write your reply..." : "Write your comment..."}
+          placeholder={parentId ? t('comments.replyPlaceholder') : t('comments.commentPlaceholder')}
           disabled={isSubmitting || !isConnected}
           rows={parentId ? 2 : 3}
         />
@@ -154,7 +156,7 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
               className="cancel-button"
               disabled={isSubmitting}
             >
-              Cancel
+              {t('reviews.cancel')}
             </button>
           )}
           <button 
@@ -162,13 +164,13 @@ const CommentForm = ({ videoId, parentId = null, onCommentSubmitted, onCancel })
             className="submit-button"
             disabled={isSubmitting || !isConnected || !comment.trim()}
           >
-            {isSubmitting ? <Loading size="small" /> : (parentId ? "Reply" : "Comment")}
+            {isSubmitting ? <Loading size="small" /> : (parentId ? t('comments.reply') : t('comments.comment'))}
           </button>
         </div>
       </form>
       {!isConnected && (
         <p className="comment-form-notice">
-          You need to connect your wallet to comment.
+          {t('reviews.loginToReview')}
         </p>
       )}
     </div>

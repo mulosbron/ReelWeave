@@ -1,3 +1,101 @@
+// Yeni öneri algoritması: Kullanıcı geçmişi, topluluk popülerliği ve kullanıcıya özel istatistikler
+// Not: Topluluk popülerliği ve puanlar async olarak dışarıdan alınmalı (örn. listsService.getCommunityFavorites, commentsService.getAverageRating)
+
+/**
+ * @param {Array} allItems - Tüm içerikler (film/dizi)
+ * @param {Array} userWatched - Kullanıcının izledikleri (itemId/hash)
+ * @param {Array} userFavorites - Kullanıcının favorileri (itemId/hash)
+ * @param {Array} userRatings - Kullanıcının puanladıkları [{itemId/hash, rating}]
+ * @param {Object} communityStats - { [hash]: { favoriteCount, avgRating } }
+ * @param {Object} [options]
+ * @returns {Array} - Skora göre sıralı öneriler
+ */
+export function getRecommendations(
+  allItems,
+  userWatched = [],
+  userFavorites = [],
+  userRatings = [],
+  communityStats = {},
+  options = {}
+) {
+  if (!allItems || allItems.length === 0) return [];
+
+  // Kullanıcının izlediği, favoriye eklediği ve puanladığı içeriklerin hash'lerini topla
+  const watchedSet = new Set(userWatched.map(i => i.hash || i.itemId));
+  const favoriteSet = new Set(userFavorites.map(i => i.hash || i.itemId));
+  const ratedSet = new Set(userRatings.map(i => i.hash || i.itemId));
+  const excluded = new Set([...watchedSet, ...favoriteSet, ...ratedSet]);
+
+  // Kullanıcıya özel istatistikler
+  const userAll = [...userWatched, ...userFavorites, ...userRatings];
+  const userRatingsOnly = userRatings.filter(r => typeof r.rating === 'number');
+  const userAvgRating = userRatingsOnly.length > 0 ?
+    userRatingsOnly.reduce((sum, r) => sum + r.rating, 0) / userRatingsOnly.length : null;
+  const userFavAgeRatings = userAll.map(i => i.ageRating).filter(Boolean);
+  const userFavYears = userAll.map(i => parseInt(i.year)).filter(y => !isNaN(y));
+  const userFavAgeRating = userFavAgeRatings.length > 0 ? mostCommon(userFavAgeRatings) : null;
+  const userFavYear = userFavYears.length > 0 ? Math.round(userFavYears.reduce((a, b) => a + b, 0) / userFavYears.length) : null;
+
+  // Skor ağırlıkları
+  const WEIGHTS = {
+    YEAR: 0.25,
+    AGE_RATING: 0.15,
+    USER_RATING: 0.25,
+    COMMUNITY_POP: 0.2,
+    COMMUNITY_RATING: 0.15
+  };
+
+  // Her içerik için skor hesapla
+  const recommendations = allItems
+    .filter(item => !excluded.has(item.hash))
+    .map(item => {
+      let score = 0;
+      // Yıl yakınlığı
+      if (userFavYear && item.year) {
+        const yearNum = parseInt(item.year);
+        if (!isNaN(yearNum)) {
+          const yearDiff = Math.abs(yearNum - userFavYear);
+          score += Math.max(0, 1 - (yearDiff / 20)) * WEIGHTS.YEAR;
+        }
+      }
+      // Age rating uyumu
+      if (userFavAgeRating && item.ageRating && item.ageRating === userFavAgeRating) {
+        score += WEIGHTS.AGE_RATING;
+      }
+      // Kullanıcı ortalama puanına yakınlık
+      if (userAvgRating && item.rating) {
+        const ratingDiff = Math.abs(parseFloat(item.rating) - userAvgRating);
+        score += Math.max(0, 1 - (ratingDiff / 4)) * WEIGHTS.USER_RATING;
+      }
+      // Topluluk popülerliği (favorilere eklenme sayısı)
+      if (communityStats[item.hash] && communityStats[item.hash].favoriteCount) {
+        // 10+ favori = tam puan, daha azsa orantılı
+        const popScore = Math.min(communityStats[item.hash].favoriteCount / 10, 1);
+        score += popScore * WEIGHTS.COMMUNITY_POP;
+      }
+      // Topluluk ortalama puanı
+      if (communityStats[item.hash] && communityStats[item.hash].avgRating) {
+        const commRating = communityStats[item.hash].avgRating;
+        score += Math.max(0, (commRating - 6) / 4) * WEIGHTS.COMMUNITY_RATING; // 6-10 arası normalize
+      }
+      return { ...item, score };
+    })
+    .filter(item => item.score > 0.1)
+    .sort((a, b) => b.score - a.score);
+
+  // Sonuçları döndür (opsiyonel limit)
+  return typeof options.limit === 'number' ? recommendations.slice(0, options.limit) : recommendations;
+}
+
+// Yardımcı: En sık geçen değeri bul
+function mostCommon(arr) {
+  const counts = arr.reduce((acc, val) => {
+    acc[val] = (acc[val] || 0) + 1;
+    return acc;
+  }, {});
+  return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+}
+
 // Score weights for different factors
 const WEIGHTS = {
     RATING: 0.3,

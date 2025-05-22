@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import useComments from '../../hooks/useComments';
 import useAuth from '../../hooks/useAuth';
 
 const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
+  const { t, i18n } = useTranslation();
   // Custom hook'ları kullan
   const { 
     userComment, 
@@ -46,17 +48,17 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
     setError('');
     
     if (!isConnected) {
-      setError('Lütfen cüzdanınızı bağlayın');
+      setError(t('comments.error.notConnected'));
       return;
     }
     
     if (!comment.trim()) {
-      setError('Lütfen bir yorum yazın');
+      setError(t('comments.error.empty'));
       return;
     }
     
     if (rating === 0) {
-      setError('Lütfen bir puan verin (1-5 yıldız)');
+      setError(t('comments.error.noRating'));
       return;
     }
     
@@ -78,10 +80,10 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
           onCommentAdded();
         }
       } else {
-        throw new Error(result.error || 'Yorum gönderilemedi');
+        throw new Error(result.error || t('comments.error.submitFailed'));
       }
     } catch (error) {
-      setError(`Yorum gönderilirken hata oluştu: ${error.message}`);
+      setError(`${t('comments.error.submitError')}: ${error.message}`);
       console.error('Yorum gönderme hatası:', error);
     } finally {
       setLoadingSubmit(false);
@@ -97,7 +99,7 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toLocaleDateString('tr-TR', { 
+    return date.toLocaleDateString(i18n.language === 'tr' ? 'tr-TR' : 'en-US', { 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric',
@@ -110,9 +112,9 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
   if (!isConnected) {
     return (
       <div className="comment-form-container">
-        <h3>Yorum Yapın</h3>
+        <h3>{t('reviews.writeReview')}</h3>
         <div className="not-connected-message">
-          Yorum yapmak için cüzdanınızı bağlamanız gerekiyor.
+          {t('reviews.loginToReview')}
         </div>
       </div>
     );
@@ -122,7 +124,7 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
   if (!userComment) {
     return (
       <div className="comment-form-container">
-        <h3>Yorum Yapın</h3>
+        <h3>{t('reviews.writeReview')}</h3>
         
         {error && (
           <div className="form-error">
@@ -132,7 +134,7 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
         
         <form className="comment-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Değerlendirmeniz:</label>
+            <label>{t('reviews.rating')}</label>
             <div className="rating-stars">
               {[...Array(5)].map((_, i) => {
                 const ratingValue = i + 1;
@@ -153,11 +155,11 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
           </div>
           
           <div className="form-group">
-            <label>Yorumunuz:</label>
+            <label>{t('reviews.comment')}</label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Bu içerik hakkında düşüncelerinizi paylaşın..."
+              placeholder={t('reviews.placeholder')}
               rows={5}
               disabled={loadingSubmit}
             />
@@ -169,7 +171,7 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
               className="btn-submit-review"
               disabled={!comment.trim() || rating === 0 || loadingSubmit}
             >
-              {loadingSubmit ? "Gönderiliyor..." : "Yorum Gönder"}
+              {loadingSubmit ? t('comments.sending') : t('reviews.submit')}
             </button>
           </div>
         </form>
@@ -180,7 +182,7 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
   // Kullanıcının yorumu varsa ve düzenleme modunda değilse, sadece yorum bilgilerini göster
   return (
     <div className="comment-form-container">
-      <h3>Yorumunuz</h3>
+      <h3>{t('reviews.yourReview')}</h3>
       
       {error && (
         <div className="form-error">
@@ -193,7 +195,7 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
           <div className="review-info">
             <div className="review-date">
               {formatDate(userComment.updatedAt || userComment.createdAt)}
-              {userComment.isEdit && " (düzenlendi)"}
+              {userComment.isEdit && ` (${t('reviews.edited')})`}
             </div>
           </div>
           
@@ -220,13 +222,13 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
             className="edit-comment-btn"
             onClick={toggleEditMode}
           >
-            Yorumu Düzenle
+            {t('reviews.update')}
           </button>
         </div>
       ) : (
         <form className="comment-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Değerlendirmeniz:</label>
+            <label>{t('reviews.rating')}</label>
             <div className="rating-stars">
               {[...Array(5)].map((_, i) => {
                 const ratingValue = i + 1;
@@ -247,11 +249,11 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
           </div>
           
           <div className="form-group">
-            <label>Yorumunuz:</label>
+            <label>{t('reviews.comment')}</label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Bu içerik hakkında düşüncelerinizi paylaşın..."
+              placeholder={t('reviews.placeholder')}
               rows={5}
               disabled={loadingSubmit}
             />
@@ -264,14 +266,14 @@ const DirectCommentForm = ({ itemId, itemType, onCommentAdded }) => {
               onClick={toggleEditMode}
               disabled={loadingSubmit}
             >
-              İptal
+              {t('reviews.cancel')}
             </button>
             <button 
               type="submit" 
               className="btn-submit-review"
               disabled={!comment.trim() || rating === 0 || loadingSubmit}
             >
-              {loadingSubmit ? "Gönderiliyor..." : "Yorumu Güncelle"}
+              {loadingSubmit ? t('comments.sending') : t('reviews.update')}
             </button>
           </div>
         </form>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import useAuth from '../../hooks/useAuth';
 import useLists from '../../hooks/useLists';
 import { LIST_TYPES, CONTENT_TYPES } from '../../utils/constants';
@@ -7,6 +8,7 @@ import CommentList from '../comments/CommentList';
 import { commentsService } from '../../services/api/comments';
 
 const MovieDetails = ({ movie }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isConnected } = useAuth();
   const { 
@@ -91,7 +93,7 @@ const MovieDetails = ({ movie }) => {
   const handleAddToList = async (listType) => {
     if (!isConnected) {
       console.log("Cüzdan bağlı değil, ana sayfaya yönlendiriliyor");
-      window.alert("Bu işlemi gerçekleştirmek için cüzdanınızı bağlamanız gerekiyor.");
+      window.alert(t('auth.connectWalletForAction'));
       navigate('/');
       return;
     }
@@ -100,7 +102,7 @@ const MovieDetails = ({ movie }) => {
     
     if (!movieId) {
       console.error("Film ID'si bulunamadı", movie);
-      window.alert("Film ID'si bulunamadı, işlem yapılamıyor");
+      window.alert(t('movieDetail.idNotFound'));
       return;
     }
 
@@ -116,7 +118,7 @@ const MovieDetails = ({ movie }) => {
         
         // İçerik detaylarını hazırla, eksik alanları kontrol et
         const movieDetails = { 
-          title: movie.title || "Bilinmeyen Film", 
+          title: movie.title || t('content.unknownMovie'), 
           year: movie.year || (movie.releaseDate ? new Date(movie.releaseDate).getFullYear() : null), 
           poster: movie.imagePath || movie.poster || movie.posterPath,
           rating: movie.rating || movie.voteAverage
@@ -143,7 +145,7 @@ const MovieDetails = ({ movie }) => {
       }
     } catch (error) {
       console.error('Liste güncelleme hatası:', error);
-      window.alert(`Liste güncelleme hatası: ${error.message}`);
+      window.alert(`${t('lists.updateError')}: ${error.message}`);
     }
   };
 
@@ -151,7 +153,7 @@ const MovieDetails = ({ movie }) => {
     <div className="movie-details">
       <div className="details-header">
         <Link to="/movies" className="btn-back">
-          ← Back
+          ← {t('movieDetail.backToMovies')}
         </Link>
       </div>
 
@@ -171,15 +173,15 @@ const MovieDetails = ({ movie }) => {
           <div className="movie-rating">
             <span className="rating-star">★</span> 
             <span>
-              {userRatings.loading ? "Loading..." : 
-               userRatings.error ? "Error loading ratings" :
-               userRatings.count > 0 ? userRatings.average : "No ratings yet"}
+              {userRatings.loading ? t('reviews.loading') : 
+               userRatings.error ? t('reviews.error') :
+               userRatings.count > 0 ? userRatings.average : t('reviews.noRatingsYet')}
             </span>
             <span className="rating-scale">
               {userRatings.count > 0 ? "/5" : ""}
             </span>
             <span className="rating-source">
-              {userRatings.count > 0 ? `(${userRatings.count}) ReelWeave users` : "ReelWeave users"}
+              {userRatings.count > 0 ? `(${userRatings.count}) ${t('app.name')} ${t('reviews.users')}` : `${t('app.name')} ${t('reviews.users')}`}
             </span>
           </div>
           
@@ -190,8 +192,8 @@ const MovieDetails = ({ movie }) => {
               disabled={listLoading}
             >
               {isItemInList(movie.id || movie.hash || window.location.pathname.split('/').pop(), LIST_TYPES.WATCHLIST) 
-                ? <><span className="list-icon">✓</span> In Watchlist</> 
-                : <><span className="list-icon">+</span> Add to Watchlist</>}
+                ? <><span className="list-icon">✓</span> {t('lists.inWatchlist')}</> 
+                : <><span className="list-icon">+</span> {t('lists.addToWatchlist')}</>}
             </button>
             
             <button 
@@ -200,8 +202,8 @@ const MovieDetails = ({ movie }) => {
               disabled={listLoading}
             >
               {isItemInList(movie.id || movie.hash || window.location.pathname.split('/').pop(), LIST_TYPES.WATCHED) 
-                ? <><span className="list-icon">✓</span> Watched</> 
-                : <><span className="list-icon">👁</span> Mark as Watched</>}
+                ? <><span className="list-icon">✓</span> {t('lists.inWatched')}</> 
+                : <><span className="list-icon">👁</span> {t('lists.addToWatched')}</>}
             </button>
             
             <button 
@@ -210,48 +212,48 @@ const MovieDetails = ({ movie }) => {
               disabled={listLoading}
             >
               {isItemInList(movie.id || movie.hash || window.location.pathname.split('/').pop(), LIST_TYPES.FAVORITES) 
-                ? <><span className="list-icon">★</span> Favorite</> 
-                : <><span className="list-icon">☆</span> Add to Favorites</>}
+                ? <><span className="list-icon">★</span> {t('lists.inFavorites')}</> 
+                : <><span className="list-icon">☆</span> {t('lists.addToFavorites')}</>}
             </button>
           </div>
           
           <div className="movie-description">
-            <h2>About</h2>
-            <p>{movie.plot || "A classic film that has captivated audiences for generations."}</p>
+            <h2>{t('content.about')}</h2>
+            <p>{movie.plot || t('content.movieDefaultDescription')}</p>
           </div>
         </div>
       </div>
 
       <div className="movie-additional-info">
-        <h2>Information</h2>
+        <h2>{t('content.information')}</h2>
         <div className="info-grid">
           <div className="info-item">
-            <span className="info-label">Year</span>
-            <span className="info-value">{movie.year || "Not available"}</span>
+            <span className="info-label">{t('content.year')}</span>
+            <span className="info-value">{movie.year || t('content.notAvailable')}</span>
           </div>
           <div className="info-item">
-            <span className="info-label">Duration</span>
-            <span className="info-value">{movie.duration || "Not available"}</span>
+            <span className="info-label">{t('content.duration')}</span>
+            <span className="info-value">{movie.duration || t('content.notAvailable')}</span>
           </div>
           <div className="info-item">
-            <span className="info-label">Age Rating</span>
-            <span className="info-value">{movie.ageRating || "Not available"}</span>
+            <span className="info-label">{t('content.ageRating')}</span>
+            <span className="info-value">{movie.ageRating || t('content.notAvailable')}</span>
           </div>
           <div className="info-item">
-            <span className="info-label">IMDB Rating</span>
-            <span className="info-value">{movie.rating ? `${movie.rating}/10` : "Not available"}</span>
+            <span className="info-label">{t('content.imdbRating')}</span>
+            <span className="info-value">{movie.rating ? `${movie.rating}/10` : t('content.notAvailable')}</span>
           </div>
           <div className="info-item">
-            <span className="info-label">Director</span>
-            <span className="info-value">{movie.director || "Not available"}</span>
+            <span className="info-label">{t('content.director')}</span>
+            <span className="info-value">{movie.director || t('content.notAvailable')}</span>
           </div>
           <div className="info-item">
-            <span className="info-label">Cast</span>
-            <span className="info-value">{movie.actors || "Not available"}</span>
+            <span className="info-label">{t('content.cast')}</span>
+            <span className="info-value">{movie.actors || t('content.notAvailable')}</span>
           </div>
           <div className="info-item">
-            <span className="info-label">Genre</span>
-            <span className="info-value">{movie.genre || "Not available"}</span>
+            <span className="info-label">{t('content.genre')}</span>
+            <span className="info-value">{movie.genre || t('content.notAvailable')}</span>
           </div>
         </div>
       </div>

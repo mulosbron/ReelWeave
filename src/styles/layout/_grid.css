@@ -12,8 +12,8 @@
 .tvshow-grid {
   display: grid;
   /* Responsive columns defined in _responsive.css or here */
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-md);
 }
 
 /* Grid for Detail Page Content */
@@ -31,4 +31,36 @@
   /* Responsive columns defined in _responsive.css or here */
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--spacing-md);
+}
+
+/* Grid for Home Page Carousel */
+.carousel-content {
+  display: flex;
+  gap: var(--spacing-md);
+  overflow-x: auto;
+  padding: var(--spacing-xs) 0;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.carousel-content::-webkit-scrollbar {
+  height: 5px;
+}
+
+.carousel-content::-webkit-scrollbar-track {
+  background: var(--background-primary);
+}
+
+.carousel-content::-webkit-scrollbar-thumb {
+  background-color: var(--border-primary);
+  border-radius: 20px;
+}
+
+.carousel-content .movie-card,
+.carousel-content .tvshow-card {
+  flex: 0 0 auto;
+  width: 180px;
+  scroll-snap-align: start;
+  margin-right: var(--spacing-xs);
 }

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import useLists from '../../hooks/useLists';
 import useAuth from '../../hooks/useAuth';
 import { LIST_TYPES } from '../../utils/constants';
 
 const AddToList = ({ itemId, itemType, itemDetails, onSuccess, onError }) => {
+  const { t } = useTranslation();
   const { isConnected } = useAuth();
   const { addToList, removeFromList, isItemInList, loading } = useLists();
   const [selectedList, setSelectedList] = useState(null);
@@ -23,7 +25,7 @@ const AddToList = ({ itemId, itemType, itemDetails, onSuccess, onError }) => {
 
   const handleListAction = async (listType) => {
     if (!isConnected) {
-      if (onError) onError('Please connect your wallet first');
+      if (onError) onError(t('auth.connectWalletFirst'));
       return;
     }
 
@@ -41,7 +43,7 @@ const AddToList = ({ itemId, itemType, itemDetails, onSuccess, onError }) => {
       }
 
       if (result.success) {
-        if (onSuccess) onSuccess(`${listStatus[listType] ? 'Removed from' : 'Added to'} ${listType}`);
+        if (onSuccess) onSuccess(`${listStatus[listType] ? t('lists.removedFrom') : t('lists.addedTo')} ${t(`lists.${listType}`)}`);
       } else {
         throw new Error(result.error);
       }
@@ -68,14 +70,14 @@ const AddToList = ({ itemId, itemType, itemDetails, onSuccess, onError }) => {
         onClick={(e) => handleQuickAdd(e, listType)}
         className={`list-button ${isInList ? 'in-list' : ''} ${isLoading ? 'loading' : ''}`}
         disabled={loading || isProcessing}
-        title={isInList ? `Remove from ${label}` : `Add to ${label}`}
+        title={isInList ? t('lists.removeFrom', { list: t(`lists.${listType}`) }) : t('lists.addTo', { list: t(`lists.${listType}`) })}
       >
         {isLoading ? (
           <span className="spinner"></span>
         ) : (
           <>
             <span className="icon">{icon}</span>
-            <span className="label">{isInList ? 'In ' : ''}{label}</span>
+            <span className="label">{isInList ? t('lists.in') + ' ' : ''}{t(`lists.${listType}`)}</span>
           </>
         )}
       </button>
@@ -88,17 +90,17 @@ const AddToList = ({ itemId, itemType, itemDetails, onSuccess, onError }) => {
         <ListButton 
           listType={LIST_TYPES.WATCHLIST} 
           icon="📋" 
-          label="Watchlist" 
+          label={t('lists.watchlist')} 
         />
         <ListButton 
           listType={LIST_TYPES.WATCHED} 
           icon="✓" 
-          label="Watched" 
+          label={t('lists.watched')} 
         />
         <ListButton 
           listType={LIST_TYPES.FAVORITES} 
           icon="❤️" 
-          label="Favorites" 
+          label={t('lists.favorites')} 
         />
       </div>
 
@@ -106,14 +108,14 @@ const AddToList = ({ itemId, itemType, itemDetails, onSuccess, onError }) => {
         className="btn btn-manage"
         onClick={() => setShowModal(true)}
       >
-        Manage Lists
+        {t('lists.manageLists')}
       </button>
 
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Manage Lists</h3>
+              <h3>{t('lists.manageLists')}</h3>
               <button 
                 className="modal-close" 
                 onClick={() => setShowModal(false)}
@@ -132,7 +134,7 @@ const AddToList = ({ itemId, itemType, itemDetails, onSuccess, onError }) => {
                         onChange={() => handleListAction(listType)}
                         disabled={loading || isProcessing}
                       />
-                      <span>{listType.charAt(0).toUpperCase() + listType.slice(1)}</span>
+                      <span>{t(`lists.${listType}`)}</span>
                     </label>
                   </div>
                 ))}

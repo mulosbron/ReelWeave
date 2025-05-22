@@ -1,8 +1,10 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { commentsService } from '../services/api/comments';
 import useAuth from './useAuth';
 
 const useComments = (itemId, itemType) => {
+  const { t } = useTranslation();
   const { walletAddress, isConnected } = useAuth();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -146,19 +148,19 @@ const useComments = (itemId, itemType) => {
   // Yorum ekle veya güncelle
   const addOrUpdateComment = useCallback(async (content, rating) => {
     if (!isConnected || !walletAddress) {
-      throw new Error('Lütfen önce cüzdanınızı bağlayın');
+      throw new Error(t('comments.error.notConnected'));
     }
     
     if (!itemId || !itemType) {
-      throw new Error('Öğe kimliği ve türü olmadan yorum eklenemez');
+      throw new Error(t('comments.error.missingItemInfo'));
     }
     
     if (!content.trim()) {
-      throw new Error('Yorum boş olamaz');
+      throw new Error(t('comments.error.empty'));
     }
     
     if (!rating || rating <= 0) {
-      throw new Error('Lütfen bir değerlendirme puanı verin');
+      throw new Error(t('comments.error.noRating'));
     }
 
     setLoading(true);
@@ -222,7 +224,7 @@ const useComments = (itemId, itemType) => {
         
         return result;
       } else {
-        throw new Error(result.error || 'Yorum gönderilemedi');
+        throw new Error(result.error || t('comments.error.submitFailed'));
       }
     } catch (err) {
       setError(err.message);
@@ -231,7 +233,7 @@ const useComments = (itemId, itemType) => {
     } finally {
       setLoading(false);
     }
-  }, [itemId, itemType, walletAddress, isConnected, fetchComments, userComment]);
+  }, [itemId, itemType, walletAddress, isConnected, fetchComments, userComment, t]);
 
   return {
     comments,

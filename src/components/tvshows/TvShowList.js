@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import TvShowCard from './TvShowCard';
 import Loading from '../common/Loading';
 
@@ -8,18 +9,20 @@ const TvShowList = ({
   error, 
   onAddToList, 
   userLists = [],
-  emptyMessage = "No TV shows found" 
+  emptyMessage = null
 }) => {
+  const { t } = useTranslation();
+  
   if (loading) {
-    return <Loading message="Loading TV shows..." />;
+    return <Loading message={t('pages.tvShows.loadingMessage')} />;
   }
 
   if (error) {
     return (
       <div className="error-message">
-        <p>Error loading TV shows: {error}</p>
+        <p>{t('pages.tvShows.error')} {error}</p>
         <button onClick={() => window.location.reload()} className="btn btn-retry">
-          Retry
+          {t('tryAgain')}
         </button>
       </div>
     );
@@ -28,7 +31,7 @@ const TvShowList = ({
   if (!tvShows || tvShows.length === 0) {
     return (
       <div className="empty-message">
-        <p>{emptyMessage}</p>
+        <p>{emptyMessage || t('pages.tvShows.noShowsFound')}</p>
       </div>
     );
   }

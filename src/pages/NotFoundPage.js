@@ -1,23 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const NotFoundPage = () => {
+  const { t } = useTranslation();
+  
   return (
     <div className="not-found-page">
       <div className="not-found-content">
         <h1>404</h1>
-        <h2>Page Not Found</h2>
-        <p>Oops! The page you're looking for doesn't exist.</p>
-        <p>It might have been moved or deleted.</p>
+        <h2>{t('pages.notFound.title')}</h2>
+        <p>{t('pages.notFound.description')}</p>
         <div className="not-found-actions">
           <Link to="/" className="btn btn-primary">
-            Go to Homepage
+            {t('pages.notFound.backToHome')}
           </Link>
           <Link to="/movies" className="btn btn-secondary">
-            Browse Movies
+            {t('community.browseMovies')}
           </Link>
           <Link to="/tvshows" className="btn btn-secondary">
-            Browse TV Shows
+            {t('community.browseTvShows')}
           </Link>
         </div>
       </div>

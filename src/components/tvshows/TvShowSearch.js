@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { debounce } from '../../utils/helpers';
 
 const TvShowSearch = ({ onSearch, onFilter }) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     year: '',
@@ -10,12 +12,11 @@ const TvShowSearch = ({ onSearch, onFilter }) => {
   });
   const [showFilters, setShowFilters] = useState(false);
 
-  const debouncedSearch = useCallback(
+  const debouncedSearch = useCallback((value) => {
     debounce((value) => {
       onSearch(value);
-    }, 300),
-    [onSearch]
-  );
+    }, 300)(value);
+  }, [onSearch]);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -65,7 +66,7 @@ const TvShowSearch = ({ onSearch, onFilter }) => {
           <input
             type="text"
             className="search-input"
-            placeholder="Search TV shows..."
+            placeholder={t('search.searchTvShows')}
             value={searchTerm}
             onChange={handleSearchChange}
           />
@@ -83,14 +84,14 @@ const TvShowSearch = ({ onSearch, onFilter }) => {
           >
             <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />
           </svg>
-          <span>Filters</span>
+          <span>{t('search.filters')}</span>
         </button>
       </div>
 
       {showFilters && (
         <div className="filter-container">
           <div className="filter-group">
-            <label className="filter-label" htmlFor="year">Year</label>
+            <label className="filter-label" htmlFor="year">{t('search.year')}</label>
             <select
               id="year"
               name="year"
@@ -98,7 +99,7 @@ const TvShowSearch = ({ onSearch, onFilter }) => {
               value={filters.year}
               onChange={handleFilterChange}
             >
-              <option value="">All Years</option>
+              <option value="">{t('search.allYears')}</option>
               {years.map(year => (
                 <option key={year} value={year}>{year}</option>
               ))}
@@ -106,7 +107,7 @@ const TvShowSearch = ({ onSearch, onFilter }) => {
           </div>
 
           <div className="filter-group">
-            <label className="filter-label" htmlFor="minRating">Minimum Rating</label>
+            <label className="filter-label" htmlFor="minRating">{t('search.minimumRating')}</label>
             <select
               id="minRating"
               name="minRating"
@@ -114,7 +115,7 @@ const TvShowSearch = ({ onSearch, onFilter }) => {
               value={filters.minRating}
               onChange={handleFilterChange}
             >
-              <option value="">Any Rating</option>
+              <option value="">{t('search.anyRating')}</option>
               {ratings.map(rating => (
                 <option key={rating} value={rating}>{rating}+ ★</option>
               ))}
@@ -122,7 +123,7 @@ const TvShowSearch = ({ onSearch, onFilter }) => {
           </div>
 
           <div className="filter-group">
-            <label className="filter-label" htmlFor="ageRating">Age Rating</label>
+            <label className="filter-label" htmlFor="ageRating">{t('search.ageRating')}</label>
             <select
               id="ageRating"
               name="ageRating"
@@ -130,7 +131,7 @@ const TvShowSearch = ({ onSearch, onFilter }) => {
               value={filters.ageRating}
               onChange={handleFilterChange}
             >
-              <option value="">All Ratings</option>
+              <option value="">{t('search.allRatings')}</option>
               {ageRatings.map(rating => (
                 <option key={rating} value={rating}>{rating}</option>
               ))}
@@ -143,7 +144,7 @@ const TvShowSearch = ({ onSearch, onFilter }) => {
               onClick={clearFilters}
               disabled={!filters.year && !filters.minRating && !filters.ageRating}
             >
-              Clear Filters
+              {t('search.clearFilters')}
             </button>
           </div>
         </div>
