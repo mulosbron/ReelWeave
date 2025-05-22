@@ -1,14 +1,21 @@
 import { arweaveClient } from '../arweave/client';
-import { API_ENDPOINTS, CONTENT_TYPES, TX_TAGS } from '../../utils/constants';
+import { API_ENDPOINTS, CONTENT_TYPES, TX_TAGS, ARWEAVE_GATEWAYS } from '../../utils/constants';
 
 class TvShowsService {
   // Fetch all TV shows from Arweave
   async getAllTvShows() {
     try {
       const response = await fetch(API_ENDPOINTS.TV_SHOWS);
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch TV shows');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Invalid content type');
+      }
+      
       const tvShows = await response.json();
       return tvShows;
     } catch (error) {

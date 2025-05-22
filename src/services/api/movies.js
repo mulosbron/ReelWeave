@@ -6,9 +6,16 @@ class MoviesService {
   async getAllMovies() {
     try {
       const response = await fetch(API_ENDPOINTS.MOVIES);
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch movies');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Invalid content type');
+      }
+      
       const movies = await response.json();
       return movies;
     } catch (error) {

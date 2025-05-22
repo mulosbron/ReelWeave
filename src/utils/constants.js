@@ -13,8 +13,8 @@ export const ARWEAVE_CONFIG = {
 
 // API Endpoints
 export const API_ENDPOINTS = {
-  MOVIES: 'https://ik4eeegs7vksywspj3ee63td4uldwvvfgrh43hm3fkrgmpdzkvda.arweave.net/QrhCENL9VSxaT07IT25j5RY7VqU0T82dmyqiZjx5VUY',
-  TV_SHOWS: 'https://nknszx53psei7ixqiaiedrv7vlznqyvz5c4fchtz52ld5cedmuva.arweave.net/apss37t8iI-i8EAQQca_qvLYYrnouFEeee6WPoiDZSo',
+  MOVIES: 'https://arweave.net/QrhCENL9VSxaT07IT25j5RY7VqU0T82dmyqiZjx5VUY',
+  TV_SHOWS: 'https://arweave.net/apss37t8iI-i8EAQQca_qvLYYrnouFEeee6WPoiDZSo',
   GRAPHQL: 'https://arweave.net/graphql',
 };
 
